@@ -1,0 +1,81 @@
+ ; convert BCD number to binary
+
+            setbyte 250,36#
+            setbyte 251,36#
+            kickoff 100
+            org 1000
+ ;--------------------------------------------------
+    multply:
+            ; subroutine to multiply two numbers
+            ; a = a*b
+            push b
+            dcr  b
+            mov  c,a
+            jz   end   ; nothing to do
+   loop:    add  c
+            dcr  b
+            jnz  loop
+   end:     pop  b  ; restore contents of b
+            ret
+ ;--------------------------------------------------
+   divide :
+            ; subroutine to divide two numbers
+            ; a = a/b
+            cpi 0
+            jz enddivide
+            push b
+            mvi  c,0
+   loop2:   inr  c
+            sub  b
+            jm   enddivide
+            jmp  loop2
+ enddivide: jz   loop3
+            dcr  c
+ loop3:     mov  a,c
+            pop  b
+            ret
+ ;--------------------------------------------------
+
+   ORG 100 
+   main:
+            lxi  h,5050
+            lxi  h,250
+            lxi  sp,250
+            mov  a,m
+            call binary2bcd
+            hlt
+ ;--------------------------------------------------
+   bcd2bin:
+            mov  a,m
+            ani  0f0;  extract 4 most significant bits
+            rrc
+            rrc
+            rrc
+            rrc       ;
+            mvi  b,10#
+            call multply  ; a=a*10
+            mov  b,a
+            mov  a,m
+            ani  0f   ; extract least significant 4 bits
+            add  b
+            inx  h
+            mov  m,a
+            ret
+ ;--------------------------------------------------
+   binary2bcd:
+              mvi  b,64
+              call binbcd
+              mvi  b,0a
+              call binbcd
+              mov m,a
+              ret
+
+   binbcd:    mvi m,0ff
+   binloop:   inr m
+              sub b
+              jnc binloop
+              add b   ; negate the one extra subtraction
+              inx h
+              ret
+
+

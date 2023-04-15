@@ -1,0 +1,67 @@
+   ; binary search
+
+
+   setbyte  250,3
+   setbyte  251,5
+   setbyte  252,7
+   setbyte  253,10
+   setbyte  254,16
+   setbyte  255,18
+   setbyte  256,22
+   setbyte  257,27
+   setbyte  258,31
+   setbyte  259,34
+   setbyte  25a,43
+   setbyte  25b,56
+
+
+   org 100
+   kickoff 100
+
+   lxi h,250
+   lxi sp,150
+   mvi a,43
+   mvi c,0a
+   call binsearch
+   hlt
+
+   binsearch:
+              mvi d,0
+   loop2:     push psw
+              mov  a,c
+              cmp  b
+              jc  endsearch
+              mov a,c
+              add b
+              rar
+              lxi d,0
+              mov e,a
+              push h
+              dad  d
+              pop  d  ;  this is actually hl
+              pop  psw
+              cmp  m
+              jz   found
+              jnc   upper
+              push psw
+              mov  a,c
+              sub  b
+              rar
+              mov  c,a
+              pop  psw
+              jmp  loop1
+  upper:      push psw
+              mov  a,c
+              add  b
+              rar
+              inr  a
+              mov  b,a
+              pop  psw
+ loop1:       push d
+              pop  h
+              jmp  loop2
+ found:       mvi  a,0ff
+              rst  1
+ endsearch:   ret
+
+

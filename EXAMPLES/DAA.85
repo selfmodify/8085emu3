@@ -1,0 +1,16 @@
+               
+               ; TEST DAA TO ADD TWO BCD NUMBERS
+
+setbyte 200,93
+setbyte 201,13
+
+org 1005
+kickoff 1005
+
+        LDA 200
+        MOV B,A
+        LDA 201
+        ADD B
+        DAA
+        STA 202
+        hlt

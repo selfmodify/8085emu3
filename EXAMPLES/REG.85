@@ -1,0 +1,8 @@
+
+
+  org 100
+  kickoff 100
+
+  a:
+     jmp a ;
+     hlt

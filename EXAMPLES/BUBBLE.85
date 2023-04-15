@@ -1,0 +1,34 @@
+    setbyte 251,34
+    setbyte 252,30
+    setbyte 253,26
+    setbyte 254,23
+    setbyte 255,20
+    setbyte 256,17
+    setbyte 257,14
+    setbyte 258,10
+    setbyte 259,7
+    setbyte 25a,3
+
+
+        org 100
+        kickoff 100
+
+
+        mvi  b,9
+ loop2: lxi  h,251
+        mov  c,b
+ loop1: mov  a,m
+        inx  h
+        cmp  m
+        jc   next
+        mov  d,m  ; interchange routine
+        mov  m,a
+        dcx  h
+        mov  m,d
+        inx  h
+
+ next:  dcr  c     ; decrement inner loop
+        jnz  loop1
+        dcr  b     ; decrement outer loop
+        jnz  loop2
+        hlt

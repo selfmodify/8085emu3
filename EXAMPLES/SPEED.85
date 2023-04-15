@@ -1,0 +1,27 @@
+      org     100
+      kickoff 100
+
+      ; test the speed of the 8085 emulator
+
+      mvi a,0
+      mvi b,0
+      mvi c,0fa
+      mvi d,0
+      mvi e,0
+      mvi h,0
+      mvi l,0
+infinite:
+      inr a
+      jnz infinite
+      inr b
+      jnz infinite
+      inr c
+      jnz infinite
+      hlt
+      inr d
+      jnz infinite
+      inr e
+      jnz infinite
+      inr h
+      jnz infinite
+      hlt

@@ -1,0 +1,42 @@
+
+        setword 250,4123
+        org     100
+        kickoff 100
+
+        lhld  250
+        lxi   sp,200
+        mov   a,l
+        mvi   b,8
+        mov   e,h
+        mvi   d,0
+        lxi   h,0
+        stc
+        cmc
+        ral
+ next:  rar       ;10 subtract, 01 add, 11 or 00 do nothing
+        push psw
+        jc  loop1
+        rar
+        jnc nothing   ; got a 10
+        push d
+        mov a,d
+        cma
+        mov d,a
+        mov a,e
+        cma
+        mov e,a
+        dad d
+        inx h
+        pop d
+        jmp nothing
+ loop1: rar
+        jc  nothing
+        dad d
+ nothing:
+        xchg
+        dad h
+        xchg
+        pop psw
+        dcr b
+        jnz next
+        hlt

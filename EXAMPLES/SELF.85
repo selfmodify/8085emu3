@@ -1,0 +1,12 @@
+
+         ; self modifying code
+
+         mov a,b
+         call a
+     a:  pop  h
+         lxi  d,0fffc
+         dad  d
+         mvi  m,0cd
+         mov  a,b
+         mov  b,a
+         hlt

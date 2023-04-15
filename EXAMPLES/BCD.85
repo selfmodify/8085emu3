@@ -1,0 +1,29 @@
+; To perform the following code conversion
+; Binary to BCD
+
+   SetByte 500,114#
+
+   org 100
+   kickoff 100
+
+   lxi sp,100 ;ljsljfd
+   lxi h,500
+   mov a,m
+   lxi h,200
+   call 1500
+   hlt
+
+  org  1500
+  mvi  b,64
+  call 5388#
+  mvi  b,0ah
+  call 5388#
+  mov  m,a
+  ret
+bcdbin:  mvi m,0ff
+  inr m
+  sub b
+  jnc 5390#
+  add b
+  inx h
+  ret

@@ -1,0 +1,7 @@
+hai :
+setbyte 500,67
+setword 500,45
+ add b,ldjfls
+ mvi a,567
+ org 456
+ hlt

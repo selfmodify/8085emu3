@@ -1,0 +1,13 @@
+      org     100
+      kickoff 100
+
+      ; infinite loop
+
+infinite:
+      inr a
+      inr b
+      inr c
+      inr d
+      inr e
+      inr h
+      jmp infinite

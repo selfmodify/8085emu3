@@ -1,0 +1,101 @@
+ ; system call testing
+
+ org 100
+ kickoff 100
+
+    setbyte 511#,01
+    setbyte 512#,02
+    setbyte 513#,03
+    setbyte 514#,04
+    setbyte 515#,05
+    setbyte 516#,06
+    setbyte 517#,07
+
+    setbyte 518#,08
+    setbyte 519#,09
+    setbyte 520#,0a
+    setbyte 521#,0b
+    setbyte 522#,0c
+    setbyte 523#,0d
+    setbyte 524#,0e
+
+    setbyte 525#,0f
+    setbyte 526#,10
+    setbyte 527#,11
+    setbyte 528#,12
+    setbyte 529#,13
+    setbyte 530#,14
+    setbyte 531#,15
+    setbyte 532#,16
+    setbyte 533#,17
+    setbyte 534#,18
+    setbyte 535#,19
+    setbyte 536#,1a
+    setbyte 537#,1b
+    setbyte 538#,1c
+    setbyte 539#,1d
+    setbyte 540#,1e
+    setbyte 541#,1f
+    setbyte 542#,20
+    setbyte 543#,26
+
+    setbyte 544#,01
+    setbyte 545#,02
+    setbyte 546#,03
+    setbyte 547#,04
+    setbyte 548#,05
+    setbyte 549#,06
+    setbyte 550#,07
+
+    setbyte 551#,08
+    setbyte 552#,09
+    setbyte 553#,0a
+    setbyte 554#,0b
+    setbyte 555#,0c
+    setbyte 556#,0d
+    setbyte 557#,0e
+
+    setbyte 558#,0f
+    setbyte 559#,10
+    setbyte 560#,11
+    setbyte 561#,12
+    setbyte 562#,13
+    setbyte 563#,14
+    setbyte 564#,15
+    setbyte 565#,16
+    setbyte 566#,17
+    setbyte 567#,18
+    setbyte 568#,19
+    setbyte 569#,1a
+    setbyte 570#,1b
+    setbyte 571#,1c
+    setbyte 572#,1d
+    setbyte 573#,1e
+    setbyte 574#,1f
+    setbyte 575#,20
+    setbyte 576#,26
+
+
+
+ lxi sp,200
+ _a:
+ lxi h,511#
+ mvi b,3b
+loop:
+ mvi  a,3
+ mvi  c,0b
+ mov d,m
+ call 5
+ inx h
+ ; delay routine
+ mvi a,9
+ push h
+ pop  d
+ push d
+ lxi h,55
+ call 5
+ pop h
+ dcr b
+ jnz loop
+ jmp _a
+ hlt

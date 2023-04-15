@@ -1,0 +1,9 @@
+
+  org 100
+  kickoff 100
+
+  mvi a,37
+  mvi b,3f
+  stc      ; set the carry
+  sbb b
+  hlt

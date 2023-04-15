@@ -1,0 +1,87 @@
+
+             Please read this it will give you a lot of info.
+
+           ************************************************
+           *             What is this program             *
+           ************************************************
+
+The program is an 8085 microprocessor kit emulator, i.e., it emulates a
+8085 microprocessor on the host machine it is running.
+The emulator uses a virtual machine to recreate the microprocessor on the
+the host machine.  The emulator also supports the system calls as
+documented in the Intel SDK(Software Development Kit).  The emulator also
+includes a assembler, a debugger and an interface. The virtual machine is
+written in a high level language (C) and hence is portable, but the
+interface is machine dependent.
+
+
+
+
+           ************************************************
+           *           How to use the emulator            *
+           ************************************************
+
+The program as such contains an assembler a debugger and an interface.
+The emulator accepts an 8085 assembly file, parses it, and checks for
+syntax errors.  If assembling is through, it loads the assembled binary
+image into the virtual machine and passes control to the debugger.
+At this stage the user gets control and can either step through the code
+or just run it.
+
+ # How do I specify which 8085 assembly file to run.
+      There are two ways for this.  In the first method just pass the
+      name of the file as a command line parameter to emulator when
+      you start the emulator.   i.e., 8085.EXE <8085-assembly-file>.
+      The second way is useful when you are already running a program and
+      want to load a new program.  For this just press 'Alt+S'(this stops
+      the current program) and then press 'F3' to get to the 'new file'
+      command. (You must supply the entire file name).
+
+ # What is the format of the 8085 assembly file.
+      The 8085 assembly file is a plain ASCII text file containing
+      8085 assembly code mnemonics and data.
+
+ # What do I do after loading the program.
+      After the program is loaded you are placed in the debugger.
+      The debugger and the interface work hand in hand to give you the
+      latest update about registers and memory location.
+      Simple keys are provided to step through the code, toggle break
+      points etc. For more details see the online help on 'hot keys'.
+      (F7 -single step, F8 - step over , F9 - Run).
+
+ Note :-  Please always look at the status line about what you can do next.
+          Get familiarized with the hot keys, by reading the Help on
+          hot keys, it helps you dig out various features of the emulator.
+
+
+ # What are the various windows that are displayed.
+
+   (first row, left to right)
+   1. Code box(mnemonics equivalent of the 8085 binary).
+   2. register box
+   3. memory dump (memory dump in hex)
+   4. flag box (the different 8085 flags)
+   (second row, left to right)
+   1. Led display (see help for 'system calls' )
+   2. Stack box
+
+
+
+
+           **************************************************
+           *   Just try these sample 8085 assembly programs *
+           **************************************************
+
+ 1. scroll.85    - Run the program by pressing F9.
+    Just watch the LED display scroll in a infinite loop.
+    (press 'Alt+S' to stop the machine or press 'F7' to switch
+     to single step mode)
+
+ 2. bubble.85   - Bubble sort program.  10 data elements are kept at
+    position 251(hex).
+    Do this - Use tab to switch to the 'memory dump box', press F5
+    and key in 251 to goto location 251(hex), now press 'F9' and
+    watch the numbers being sorted.
+
+ 3. readdisp.85 - Read two keys from the keyboard and display it in the
+    rightmost two LED's.

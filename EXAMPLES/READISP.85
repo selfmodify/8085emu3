@@ -1,0 +1,41 @@
+org 50 
+kickoff 50
+
+; readkeys
+         LXI SP,200
+         CALL readkeys
+         CALL dispdata
+         hlt
+
+
+readkeys: MVI A,05
+          CALL 5
+          MOV B,A
+          MVI A,05
+          CALL 5
+          MOV C,A
+          MOV A,B
+          RLC
+          RLC
+          RLC
+          RLC
+          ORA C
+          RET
+
+dispdata: LXI H,50
+          MOV B,A
+          ANI 0F0
+          RRC
+          RRC
+          RRC
+          RRC
+          MOV M,A
+          INX H
+          MOV A,B
+          ANI 0F
+          MOV M,A
+          DCX H
+          MVI A,03
+          MVI C,08
+          CALL 5
+          RET

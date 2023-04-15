@@ -1,0 +1,10 @@
+ ; read a data from keyboard using the function 5 of the system call
+
+   loop:
+         mvi a,5
+         call 5
+         mov  b,a
+         jmp loop
+
+
+

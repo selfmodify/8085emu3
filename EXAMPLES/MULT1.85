@@ -1,0 +1,38 @@
+;               MULTIPLICATION USING     REPEATED ADDITION
+;
+; multiply 8-bit by 8-bit to obtain 16-bit product
+;
+
+setbyte 200,0ff      ; hex multiplicand
+setbyte 201,0ff      ; hex multiplier  
+
+        org 100
+        kickoff 100
+
+;MAIN PROGRAM
+
+        LXI SP,300  ; Chumma Aadambaram,we dont use stack here
+        
+        LHLD 0200
+        XCHG
+        CALL mult
+        SHLD 202    ;16-BIT Product in 103 and 104
+        hlt
+
+;END of main program
+
+mult :  MOV A,D       ; Multiplication subroutine begins here
+        MVI D,00      ; DE forms muliplier
+        LXI H,00      ;
+        MVI B,08        ; Count for shifting multiplier
+shift : RAR
+        JNC noadd
+        DAD D
+noadd : XCHG
+        DAD H          ; left shift present sum
+        XCHG
+        DCR B
+        JNZ shift
+        RET
+
+

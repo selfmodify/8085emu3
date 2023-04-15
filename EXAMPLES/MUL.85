@@ -1,0 +1,23 @@
+
+ ; This program multiplies two numbers stored in memory by the process
+ ; of repeated addition
+
+       org 1000
+       kickoff 1000
+
+       setbyte 200,5
+       setbyte 201,2
+
+       lxi h,50
+       mov a,m
+       inx h
+       mov b,m
+       dcr b
+       mvi d,0
+       mov c,a
+ loop: add c
+       jnc  incr
+       inr d
+ incr: dcr b
+       jnz loop
+       hlt

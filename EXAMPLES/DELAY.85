@@ -1,0 +1,10 @@
+; delay routine example
+lxi h,02
+mvi a,09
+loop:
+call 05
+call 05
+call 05
+call 05
+call 05
+jmp loop

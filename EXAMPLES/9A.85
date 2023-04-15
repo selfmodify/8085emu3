@@ -1,0 +1,34 @@
+ ; a bcd number between 0 and 99 will be converted into its binary form
+
+ org 100
+ kickoff 100
+
+ lxi sp,300
+ mvi a,37
+ call bcd2bin
+ hlt
+
+
+ bcd2bin:
+ push b
+ push d
+ mov b,a
+ ani 0f
+ mov c,a
+ mov a,b
+ ani 0f0
+ rrc
+ rrc
+ rrc
+ rrc
+ mov d,a
+ xra a
+ mvi e,0ah
+sum:
+ add e
+ dcr d
+ jnz sum
+ add c
+ pop d
+ pop b
+ ret

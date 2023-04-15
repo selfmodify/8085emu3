@@ -1,0 +1,43 @@
+ ; system call testing
+
+ org 100
+ kickoff 100
+    setbyte 511#,0
+    setbyte 512#,1
+    setbyte 513#,2
+    setbyte 514#,3
+    setbyte 515#,4
+    setbyte 516#,5
+    setbyte 517#,6
+    setbyte 518#,7
+
+    setbyte 519#,0
+    setbyte 520#,1
+    setbyte 521#,2
+    setbyte 522#,3
+    setbyte 523#,4
+    setbyte 524#,5
+    setbyte 525#,6
+    setbyte 526#,7
+
+ lxi sp,200#
+ again:
+ lxi h,511#
+ mvi b,8
+loop:
+ mvi  a,3
+ mvi  c,0b
+ mov d,m
+ call 5
+
+ ; delay routine
+ mvi a,9
+ push h
+ lxi h,55
+ call 5
+ pop h
+ inx h
+ dcr b
+ jnz loop
+ jmp again
+ hlt

@@ -1,0 +1,33 @@
+
+             ; This program adds 10 8 bit numbers in memory
+
+             setbyte 500#,50
+             setbyte 501#,60
+             setbyte 502#,10
+             setbyte 503#,2
+             setbyte 504#,3
+             setbyte 505#,4
+             setbyte 506#,7
+             setbyte 507#,8
+             setbyte 508#,9
+             setbyte 509#,0a
+             setbyte 510#,0b
+
+             kickoff 1000#
+             org 1000#
+             lxi  sp,100#
+             call subroutine
+             hlt
+
+             org 4000#
+
+ subroutine: lxi h,500#
+             mvi b,9#
+             mov a,m
+             inx h
+  next:      add m
+             inx h
+             dcr b
+             jnz next
+             ret
+;  and that's all

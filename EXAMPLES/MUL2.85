@@ -1,0 +1,25 @@
+        ; multiplication by shift and add
+        ; 'a' contains the multiplier 'e' contains the multiplicand
+        ; 'HL' contains the final result
+
+        org 100
+        kickoff 100
+
+        setbyte 500,14
+        setbyte 501,21
+
+        lxi  h,1421  ; load hl direct
+        mov  a,l
+        mvi  d,0
+        mov  e,h
+        mvi  b,8
+        lxi  h,0   ; reset HL
+nextbit:rar        ; rotate accumulator right
+        jnc  noadd
+        dad  d     ; shift right DE
+ noadd: xchg       ; exchange HL and DE
+        dad  h
+        xchg
+        dcr  b
+        jnz nextbit
+        hlt

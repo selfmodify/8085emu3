@@ -1,0 +1,53 @@
+This program simulates an 8085 microprocessor kit.
+(Technically this is a 8085 instruction set simulator)
+
+It has a very good online help with hypertext facility.
+The package has features like :-
+
+0. A two pass assembler :- 
+   Your 8085 programs can be stored as normal ASCII text and submitted to 
+   the program, this will be parsed by a two pass assembler. 
+
+1. Viewing the 8085 code in mnemonic form 
+
+2. Changing the instructions, data, registers and flags on the fly
+
+3. Function key description
+
+ General Help                                -  F1
+ set/remove breakpoints                      -  F2
+ Open new 8085 assembly file and parse it
+ (you must know the file name)               -  F3
+ Execute upto cursor position                -  F4
+ Goto any position                           -  F5 (or ^G)
+ Start a new session for the current program -  F6
+ trace                                       -  F7
+ step over                                   -  F8
+ Run                                         -  F9
+ Check this ??                               -  F10
+ Position yourself at the position where
+ the 'IP' is pointing                        -  F11
+ Come back to the Instruction box in
+ one key stroke                              -  F12
+
+
+ Context sensitive help                      -  CTRL+F1
+ Previous Help                               -  ALT+F1
+
+4. Support system calls as described in
+   the intel SDK. Plus 2 extra system calls to communicate with
+   the PC's ports.
+
+5. Excellent Online context sensitive help. 
+   Press CTRL+F1 and you get online context sensitive help.
+   Press F1 to get general help
+   
+6. Communicate to external devices through the PC's port.
+   External devices can be attached to the PC's ports and can be
+   serviced by your 8085 rst routines.
+   For more details see the help. (Press F1 choose the topic
+   "Miscellaneous" press enter,choose "technical details",then
+   choose "Interrupt details")
+
+6.1 If you find some other features
+    please let me know ;) !!!!

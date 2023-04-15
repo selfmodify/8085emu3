@@ -1,0 +1,40 @@
+; divide 16 bit by 8 bit using shift and subtract
+
+setbyte 300,00
+setbyte 301,20
+setbyte 302,20
+
+        org 100
+        kickoff 100
+
+        LHLD 300
+        XCHG
+        LXI H,302
+        MOV C,M
+        MVI B,10
+        XRA A
+        MOV H,A
+        MOV L,A
+cont :  DAD H
+        XCHG
+        STC
+        CMC
+        RAL
+        DAD H
+        JNC msbzero
+        INR A
+msbzero:XCHG
+        SUB C
+        JNC nocarry
+        ADD C
+        JMP next
+nocarry:INX H
+next   :DCR B
+        JNZ cont
+        SHLD 303
+        STA 305
+        hlt
+
+
+
+

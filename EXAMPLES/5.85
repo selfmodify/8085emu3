@@ -1,0 +1,20 @@
+ ; program to multiply two 8 bit numbers to give a 16 bit value
+
+  org 101
+  kickoff 101
+
+          mvi b,8
+          mvi c,3
+          mov a,c
+          cpi 0
+          jz last
+          dcr c
+          mov a,b
+          mvi d,0
+  loop:   add b
+          jnc next
+          inr d
+  next:   dcr c
+          jnz loop
+  last:   hlt
+

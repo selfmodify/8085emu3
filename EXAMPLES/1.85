@@ -1,0 +1,22 @@
+ ; to move a block of numbers from one memory location to another
+
+ setbyte 150,3
+ setbyte 151,12
+ setbyte 152,4
+ setbyte 153,9
+ setbyte 154,1
+ 
+ org 100
+ kickoff 100
+
+ mvi b,5 ; number of numbers to move
+ lxi h,150
+ lxi d,530
+loop: mov a,m
+ stax d
+ inx h
+ inx d
+ dcr b
+ jnz loop
+ hlt
+

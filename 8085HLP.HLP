@@ -1,0 +1,4158 @@
+F1
+                      Man Page for the  8085 Emulator
+                      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                               About
+
+                                 √
+  What is this package          √           Hot keys
+   Ù Getting started             √
+   ı Format for programs         √           screen shot
+                                 √
+                                 √
+  Run time errors               √           Instructions
+  Compile time errors           √           System calls
+                                 √
+  Changing data                 √           Changes in this version
+  Miscellaneous                 √          ® I had to stop
+                                 √
+ 
+Changes in this version
+ Changes in this version 
+
+  Changes in this version
+   Delay routine
+
+
+Miscellaneous
+ Miscellaneous 
+
+   Proposed standard usage
+   Physical memory size
+   References
+   Technical details
+   Legend
+
+Technical details
+ Technical details 
+
+  I have dumped all technical details in this page.
+
+     Interrupt details
+     Rim/Sim details
+     System call details
+
+Interrupt details
+  Interrupt details  
+
+  1. Interrupts  :-     The   rst  and  trap  interrupts  have  been
+     implemented  and  it  is  possible  to interrupt the machine by
+     using  external  devices  or  through  software.   The  general
+     purpose 'intr' interrupt has not been implemented.
+
+     The  rst  and  trap interrupts have been implmented using  80x86
+     software interrupts in the following order.
+
+     8085 interrupts          80x86 interrupts
+     ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+     Trap                         200(hex)
+     Rst 5.5                      201(hex)
+     Rst 6.5                      202(hex)
+     Rst 7.5                      203(hex)
+
+     When  either of the above four interrupts are raised the machine
+     jumps to locations as specified below.
+
+     8085 interrupts        Branch to location
+     ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+     Trap                         24(hex)
+     Rst 5.5                      2c(hex)
+     Rst 6.5                      34(hex)
+     Rst 7.5                      3c(hex)
+
+     You  may  place  your own code through an org directive at these
+     locations  and  service  these  interrupts.   By  default  a ret
+     instruction is placed at these locations.
+
+     The  'Intr'  interrupt  has not implemented, because an external
+     interrupt will not be able to interrupt and specify the location
+     to  branch simultaneously.   Though it is possible to do this by
+     other means, I didn't try too hard for this.
+
+ Also see :-
+           Technical details
+
+
+Changing data
+ Changing data 
+
+      changing memory data           changing register data
+
+      changing flags                 changing instructions
+
+
+Rim/Sim details
+ Rim/Sim details 
+
+  The rim and sim instructions have been implemented only partially.
+
+  The features that are missing are
+
+     Priorities cannot be assigned to the rst/trap interrupts
+         :-  This is because I haven't emulated an 8259!!.
+
+     Pending interrupts cannot be recognised.
+
+  It is possible to enable/disable individual interrupts using the
+  sim instruction.
+
+
+ Also see :-
+           Technical details
+
+System call details
+ System call details 
+
+   Unlike the original microprocessor kit, no registers are affected
+   in the case of the Emulator.
+
+   Two additional System calls have been provided
+   They are
+
+    Extra functionality 1
+    Extra functionality 2
+
+ Also see :-
+           Technical details
+
+Not enough memory to display help
+ Not enough memory to display help 
+
+  There was not enough memory to display the help topic chosen
+
+Help Topic not found
+ Help Topic not found 
+
+ Help  was  unable  to locate 'help' for the topic you chose.   This
+ could happen if your help file is corrupted or is incomplete
+
+ Please report this to the author.   Also note down the the name of
+ the help topic
+
+Error in help file
+ Error in help file 
+
+   Your help file is corrupted.
+   Reinstall the package or get a new copy of the help file
+
+References
+ References 
+
+   Books referred :-
+                      Microprocessor Architecture,
+                      Programming,
+                      and Applications with the 8085/8080A
+
+                      by  Ramesh S. Gaonkar
+                          Onondaga Community College,
+                          State University Of New York.
+
+                      Publishers :- Wiley Eastern Limited.
+
+
+
+Proposed standard usage
+  Proposed standard usage 
+
+  The standards specified below are recommended by the author  of
+  this program.
+
+  I strongly recommend you to follow these standards so that your
+  programs  run  properly  and are compatible with future versions
+  of this software.
+
+  1.  Use hlt instruction to stop your programs instead of rst 1.
+
+  2.  Don't  place your code in the first 100(hex) locations. The
+      first 100(hex) bytes are reserved for ISR routines. You may
+      use this only if you intend to write your own ISR routines.
+      (ISR should be read as Interrupt Service Routines)
+
+  3.  The  end  of memory is generally reserved for the stack and
+      should not be used by programs.
+
+  4.  Place  your code in the lower regions of memory, this makes
+      the machine faster.
+
+  5.  You  cannot execute your subroutine placed at location 0005
+      through  a  call 0005.   All calls to location 0005 will be
+      interpretted by the machine as system calls.
+
+valid characters
+ Valid characters 
+
+  The valid characters that can be used to define labels are
+  A-Z ,a-z, 0-9, and '_'(underscore)
+
+  A semicolon ';' marks the beginning of a comment line.  All
+  characters to the end of line are then considered to be comment
+  and are ignored.
+
+label
+labels
+ Labels 
+
+  The valid characters that can be used to define labels are
+  A-Z ,a-z, 0-9, and '_'(underscore)
+
+  A label should be followed by a ':'
+
+  A label is generally used to specify the start of a subroutine
+  or a loop.
+  eg:-
+       loop  :  mov b,a
+                dcr a
+                jnz loop    ;jump to location 'loop'
+
+  eg:-  sub1 :  mov a,b
+                rar
+                ret         ;return back to the calling subroutine
+ Also see :-
+           org directive
+
+I had to stop
+ I had to stop 
+  Compiler used :- Borland C/C++ 3.1
+ ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  Quite right!! I had to stop this project
+
+  I started it off as a small project,(small enough to be compiled in
+  the 'small model').  Slowly it grew, but I was  confident that
+  transition to a higher model would steam roll all our problems.
+
+  Well, everything went our way until I got the message
+  Too much global data !!!!!
+  Panickingly I struck the F1 key,
+  and whew!! the IDE showed a big help screen.  I ran through the
+  help screen and I was glad to find the word "Solutions"
+
+  I was overjoyed, when I saw that I had too many options.
+  The help screen said "Use calloc, malloc or even further, farmalloc"
+  I also  had choice of using the "far" keyword
+  In addition to this it said don't worry you always have the huge
+  memory model which supports 64K for each data segment
+  and 1Mb for code!!!
+
+  Immediately I started off, and compiled my  code in the Huge memory
+  model.
+
+  But everything in vain !!
+
+  The compiler said TOO MUCH GLOBAL DATA.
+
+  But  never mind, I  will use malloc, calloc or even further 
+       far                      malloc (far enough eh!!!)
+
+  But the compiler never got, far enough to place data in a different
+  segment.  Neither did the "far" keyword help us in any way.
+
+  For a moment I thought(with a slight grin) that I had pushed
+  the compiler quite too far, that it could not get close enough
+  to compile my code.
+
+  I didn't loose hope (After all it was a product from Borland)
+  and started compiling in "Large model".................
+  ....................  Well I don't want to
+  repeat what happened.
+
+  Finally I gave the "medium model" everything I had
+
+  And violla!!!!!!!!!!!! it compiled.  It had beaten the
+  Huge and the Large models.
+
+  I was overjoyed, but I knew that the medium model definitely
+  had the 64K restriction on data.
+
+  And yes one day it showed up.  But I was glad that the project
+  is just complete.(I only had to reduced the size of the
+  symbol table by half to achieve completion)
+
+What is this package
+ What is this package 
+ ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+    This is a program to emulate the microprocessor kit based on
+    the intel 8085 microprocessor.  You can use this package
+    to run your 8085 assembly language programs.
+
+
+    The emulator displays 6 windows, which are
+    The code box         :- to display mnemonics of the machine code
+    The register box     :- to display the contents of all registers
+    The memory dump box  :- to see the memory dump in hex
+    The flag box         :- to visualize the flags
+    The led box          :- 7 segment led's can be used to display
+                            data through system calls
+    The stack box        :- view the top 4 elements of stack.
+
+
+    The emulator currently supports 16K or RAM
+
+ Also see :-
+           Switching windows
+           Hot keys                  Code box hot keys
+           Physical memory size
+
+windows
+screen shot
+ Screen shot 
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+       code box               register box   memory dump box   flag box
+ ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬    ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¬    ¿¡¡¡¡¡¡¡¡¡¡¬    ¿¡¡¡¡¡¬
+ √[0100:]mvi  a,08     ƒ    √ a   =   00  ƒ    √ 0000: c9 ƒ    √ c=0 ƒ
+ √ 0102: mvi  c,00     ƒ    √ b   =   00  ƒ    √ 0001: 00 ƒ    √ s=0 ƒ
+ √*0104:*call 05       ƒ    √ c   =   00  ƒ    √ 0002: 00 ƒ    √ z=0 ƒ
+ √ 0107: mvi  a,09     ƒ    √ d   =   00  ƒ    √ 0003: 00 ƒ    √ p=0 ƒ
+ √0109:lxi  h,10     ƒ    √ e   =   00  ƒ    √ 0004: 00 ƒ    √ a=0 ƒ
+ √ 010c: call 05       ƒ    √ h   =   00  ƒ    √ 0005: 00 ƒ    ≈∆∆∆∆∆«
+ √ 010f: mvi  a,08     ƒ    √ l   =   00  ƒ    √ 0006: 00 ƒ
+ √ 0111: mvi  c,01     ƒ    √ [HL]= 00c9  ƒ    √ 0007: 00 ƒ
+ √ 0113: call 05       ƒ    √ IP  = 0100  ƒ    √ 0008: c9 ƒ
+ √ 0116: hlt           ƒ    √ SP  = 3ff0  ƒ    √ 0009: 00 ƒ
+ ≈∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆«    ≈∆∆∆∆∆∆∆∆∆∆∆∆∆«    ≈∆∆∆∆∆∆∆∆∆∆«
+
+                    led box                             Stack box
+ ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬  ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬
+ √       __     __        __   __      __   __   ƒ  √ [SP]  = 0000   ƒ
+ √    |  __|    __| |__| |__  |__        | |__|  ƒ  √ [SP+2]= 0000   ƒ
+ √    | |__     __|    |  __| |__|       | |__|  ƒ  √ [SP+4]= 0000   ƒ
+ √                                               ƒ  √ [SP+6]= 0000   ƒ
+ ≈∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆«  ≈∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆«
+
+  Also see :-
+            Switching windows         Goto
+            Break point               Goto Cursor
+
+            Changing Instructions     changing memory data
+            changing register data    changing flags
+
+            Hot keys                  Code box hot keys
+ 
+ code box
+  Code Box 
+
+  The  left  most  window  is  the  code box, where you see your 8085
+  instructions  in  mnemonic form.  Your current 'cursor position' is
+  highlighted  and is shown within square brackets [ ] .  Another bar
+  in  the code box shows the position of the Instruction pointer, and
+  is indicated by the presence of the characters ' ' 
+
+  Break points are indicated by 2 asteriks '*' 
+
+
+   ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬
+   √[0100:]mvi  a,08     ƒ-> This is your cursor/current position bar
+   √ 0102: mvi  c,00     ƒ
+   √*0104:*call 05       ƒ-> This is a Break point
+   √ 0107: mvi  a,09     ƒ
+   √0109:lxi  h,10     ƒ-> This is where the 'IP' points to 
+   √ 010c: call 05       ƒ
+   √ 010f: mvi  a,08     ƒ
+   √ 0111: mvi  c,01     ƒ
+   √ 0113: call 05       ƒ
+   √ 0116: hlt           ƒ
+   ≈∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆«
+
+
+  Cursor keys can be used to browse (run through) the entire memory
+  location while viewing the data as mnemonics.
+  Keys available are    :-    HOME,  END,  PAGE DOWN,  PAGE UP
+                              UP ARROW,  DOWN ARROW,
+  Also see :-
+            Code box hot keys         Switching windows
+            Break point               Goto Cursor
+            Hot keys                  Goto
+
+            changing memory data      changing register data
+            changing flags            changing instructions
+
+
+ 
+Backspace
+Alt+Backspace
+ Backspace/Alt+Backspace 
+
+Backspace     :-  Decrement the value of 'IP' so that it points
+to the previous instruction.  Hence it is possible to undo the
+effect of executing an instruction partially.
+Note :- This command does not restore the changed values of any
+other register or memory location
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+Alt+Backspace :-  This is just the opposite of the previous command,
+wherein the value of 'IP' is incremented by the length of the current
+instruction so that 'IP' now points to the next instruction.
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+ Also see :-
+           Code box hot keys
+           Hot keys
+
+Code box hot keys
+ Code box hot keys 
+Backspace     :-  Decrement the value of 'IP' so that it points
+to the previous instruction.  Hence it is possible to undo the
+effect of executing an instruction partially.
+Note :- This command does not restore the changed values of any
+other register or memory location
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+Alt Backspace :-  This is just the opposite of the previous command,
+wherein the value of 'IP' is incremented by the length of the current
+instruction so that 'IP' now points to the next instruction.
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
++/-           :-  This is just like the above two commands but can
+be used only when the code box is active.
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+F12           :-  Switch back to the code box at any time from any
+window.  This hot key is always available.
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+F11           :-  Use this key to Goto the instruction pointed by
+the 'IP'.
+This hot key can be used in both the code box and the memory dump box.
+∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+F7            :-  Single step through each instrucion
+F8            :-  Step over an instruction.
+F9            :-  Run continuously
+Ctrl+F9       :-  Run continuously
+F2            :-  Toggle breakpoint
+F4            :-  Execute till current cursor position.
+
+Also see :-
+            Hot keys
+
+F7
+Single step
+ Single step through each instruction 
+
+ Use F7 to single step through each instruction.  All flags and memory
+ location are updated immediately and the display is refreshed.
+
+ The affects of self modifying code have also been taken into
+ consideration.
+
+ Also see :-
+             Step over       F8
+             Break point     F2
+             Run             F9
+             Goto cursor     F4
+             Ctrl+F9
+             Hot keys
+
+F8
+Step over
+ Step over an instruction 
+
+ Use F8 to step over each instruction.  All flags and memory
+ location are updated immediately and the display is refreshed.
+
+ The difference between single stepping and step over is that
+ step over can execute a call instruction and return back to
+ single step mode, without single stepping through the called
+ subroutine.
+
+ If the function call you tried to step over runs into an infinite
+ loop then you can press F8 again to stop the execution and examine
+ the offending code
+
+ If a Break point is set within the called subroutine then the
+ machine is put back into the single step mode when the break point
+ is encountered.
+
+ The affects of self modifying code have also been taken into
+ consideration.
+
+ Also see :-
+
+             Single step     F7
+             Break point     F2
+             Run             F9
+             Goto cursor     F4
+             Ctrl+F9
+             Hot keys
+
+F9
+Run
+ Run continuously 
+ Press F9 to run the program continuously.
+ After each instruction is executed, all windows are refreshed
+ When a Break point is encountered the machine is put back into
+ the single step.
+
+ If the machine enters an infinite loop, you can press F9 again to
+ bring the machine back to single step mode.
+
+ Also see :-
+             Single step     F7
+             Step over       F8
+             Break point     F2
+             Goto cursor     F4
+             Ctrl+F9
+             Hot keys
+
+About
+ I have done all the hard work 
+
+                         An 8085 Emulator
+                         ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                      Copyright (c), V. Kumar
+
+              V. Kumar        (email -> kumar__v@hotmail.com)
+
+  If you find this program useful and wish to support it,
+  the author requests that you send a $10(or less or more ;-) )
+  donation to:
+
+       Snail Mail ->
+          TC 21/2O50, Single Street,
+          Karamana,
+          Trivandrum - 695 002
+          Kerala,  India
+
+ In case of bugs please contact :-
+          V. Kumar        email -> kumar__v@hotmail.com
+
+      Eighth Semester Student of Computer Science & Engineering,
+           College of Engineering, Trivandrum,(Year - 1996)
+                    Kerala, India - 695 016.
+
+
+
+Ctrl+F9
+ Run continuously 
+ Press Ctrl+F9 to run the program continuously.
+
+ This is similar to F9 but has the difference that, only the
+ register and flag windows are refreshed after execution of each
+ instruction.  This makes the execution of programs faster.
+
+ When a Break point is encountered the machine is put back into
+ the single step.
+
+ If the machine enters an infinite loop, you can press Ctrl+F9 again
+ to bring the machine back to single step mode.
+
+ Also see :-
+             Single step     F7
+             Step over       F8
+             Break point     F2
+             Run             F9
+             Goto cursor     F4
+             Hot keys
+
+Break point
+Break points
+F2
+ Break points 
+
+Break points can be toggled by pressing F2.
+A break point is indicated by a highlight and two asteriks '*'
+sorrounding the address where the breakpoint was introduced.
+
+When a break point is encountered the program stops and you are
+put back into the single step mode.
+
+Note :-  you can install upto 255 break points
+
+Also see :-
+             Single step     F7
+             Step over       F8
+             Run             F9
+             Goto cursor     F4
+             Ctrl+F9
+             Hot keys
+
+Goto Cursor
+Goto cursor
+F4
+ Goto Cursor 
+
+The Goto cursor command is issued by pressing F4 when you are
+in the code box.
+
+The Goto cursor command runs your program from the current 'IP'
+to the line the current position is on the code box.
+
+If a Break point is encountered before the current position is reached
+then the program stops at the break point.
+
+Also see :-
+             Single step     F7
+             Step over       F8
+             Break point     F2
+             Run             F9
+             Ctrl+F9
+             Hot keys
+
+Changing Instructions
+changing instructions
+ Changing Instructions 
+
+ You can key in new instructions,  while you are in single
+ step mode. Simply position your current position bar using arrow keys
+ and key in the instructions(I insist, any key).
+
+ An input box pops up wherein you key in the instruction to be
+ assembled.  The new instruction is not inserted but overwrites
+ the previous instruction.
+
+ If the previous instruction was 3 bytes long and the new one 2 bytes,
+ then the remaining 1 byte of the is not discarded but is interpretted
+ as the start of the next instruction
+
+ Invalid instructions are reported with an appropriate error message
+
+ Also see :-
+             changing register data
+             changing memory data
+             changing flags
+
+changing memory data
+ Changing Memory data 
+
+ switch to the memory dump box using TAB/SHIFT+TAB and position
+ the 'current position' bar where you want to change the data.
+
+ A input box will pop up when you press any key.(I insist, any key).
+ You can key in an 8 bit or 16 bit number.  When a 16 bit number is
+ keyed in, 2 memory locations are affected.
+
+ Note :- When 16 bit numbers are entered, they are stored in reverse
+         order sequence.
+
+ Also see :-
+             Numeric format
+             changing instructions
+             changing register data
+             changing flags
+
+changing flags
+ Changing flags  
+
+ switch to the flag box using TAB/SHIFT+TAB and position
+ the 'current position' bar on the flag which you want to change.
+ Use +/- to toggle the flags.
+
+ Also see :-
+             changing instructions
+             changing register data
+             changing memory data
+
+Goto
+ Goto Position 
+
+ The goto command can be used to position you any where in you current
+ window.
+ The Hot keys available for this are F5 and ^G
+
+ Also see :-
+             Switching windows
+
+Switching windows
+TAB
+SHIFT+TAB
+ Switch between windows 
+
+ You can use TAB/SHIFT+TAB to switch to the next/previous window.
+
+ The active window is indicated by bright white 'current position'
+ bar.
+
+ Also see :-
+             code box
+             register box
+             memory dump box
+             flag box
+             led box
+
+Getting started
+ Getting Started  
+
+ Well if you have reached upto this point then you know how to
+ start the application!!   but just in case ..................
+
+ To start this pacakge type in 8085.EXE with or without  a
+ filename as a parameter.  If a filename is specified
+ (which is the name of your 8085 assembly source code)
+ it is parsed by a 2 pass assembler(sounds great eh!!)
+ and converted into 8085 machine code.
+
+ If the assembler finds any errors then it is reported one by one.
+
+ Error report have the following format
+ <Line Number> : <descriptive message> : <offending line> 
+
+ If assembling is through the 8085 binary is loaded, from here onwards
+ you have complete control.  You can step through the code by pressing
+ F7. (Look into Debugging/Running hot keys for more info).
+ The data in any of the windows can be changed on the fly.
+
+ To load a new file press Alt+S(This makes the current 8085 assembly
+ program inactive).  Now press F3 to get to the new file command line
+ and key in the entire file name(including extension), this is then
+ parsed and loaded into memory.
+
+ When the emulator executes the hlt instruction or when the Alt+S
+ key is pressed the currently program becomes inactive.  You can
+ either reload the current program by pressing F6 or load a new
+ file by pressing F3.
+
+ Please make sure that you have gone through the hot keys section,
+ because this section unearths many features of the emulator.
+
+Also see :-
+            screen shot
+            Run time errors
+            Compile time errors
+            Numeric format
+            Hot keys
+
+Format for programs
+ Format for programs 
+Programs can be written using any plain ASCII editor like 'NE'
+or 'TURBO C' editor.
+
+A typical program would be a collection  of 8085 assembly mnemonics
+and directives.
+
+Since your programs or subroutines can be placed at arbitrary
+locations in memory there must exist directives which tell the
+assembler where to place your code.
+
+This is done through the org directive
+
+Note :- All numbers are in hex
+
+Also see :-
+            labels
+            comments
+            valid characters
+
+comments
+ Comments 
+
+   A comment can be entered in a source file by entering a
+   semicolon(';').  All characters from the semicolon till the
+   end of line are considered as a comment, and ignored.
+
+Also see :-
+            labels
+            valid characters
+
+Directives
+directive
+ Directives 
+
+ Directives are special instruction to the assembler.
+ They are not part of the Instruction set of the microprocessor
+ and are not placed in memory at run time.
+
+ The directives available are
+
+            Org
+            Kickoff
+            Setbyte
+            Setword
+
+org
+Org
+ Org directive 
+
+ org <address>
+
+ The <address> field following the org directive specifies where
+ in memory the subroutine following it should be placed.
+
+ eg:-
+
+    org 350   ; you have placed a directive
+    mvi a,35  ; This is placed at location 350 (hex)
+    dad d     ; This is placed at location 352 (hex)
+    sub b     ; This is placed at location 353 (hex)
+
+Also see :-
+            Numeric format
+            Kickoff
+            Setbyte
+            Setword
+            Hot keys
+
+Kickoff
+ Kickoff directive 
+
+ Kickoff <address>
+
+ The <address> field following the kickoff directive specifies the
+ initial value of 'IP', when your program first starts.
+
+ ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+ eg:-
+    ; This is a subroutine to add the registers 'b' and 'c'
+    ; and place the result in 'a'
+    org 350   ; place the subroutine at location 350(hex)
+    mov a,b   ;
+    add c     ;
+    ret       ; return back to the calling routine
+
+ ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+    ; This is your main program where control is handed over
+    ; when execution first begins
+    org      500  ;  place this routine at location 500(hex)
+    kickoff  500  ;  this is where the ball starts rolling
+    mvi  b,5      ;
+    mvi  c,0a     ;
+    call 350      ; call the subroutine located at 350
+    hlt           ;
+ ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+Also see :-
+            Numeric format
+            Org
+            Setbyte
+            Setword
+            Hot keys
+
+Setbyte
+ Setbyte directive 
+
+  Setbyte <address>,<data>
+
+  eg:- setbyte 567,23   ; place the data '23'(hex) at location 567(hex)
+
+  The setbyte directive places the 8 bit <data> at the location
+  specified by the <address> field
+
+Also see :-
+            Numeric format
+            Org
+            Kickoff
+            Setword
+            Hot keys
+
+Setword
+ Setword directive 
+
+  Setword <address>,<data>
+
+  eg:- setword 567,2356  ;place the data '2356'(hex)
+                         ;at location 567(hex)
+
+  The setword directive places the 16 bit <data> at the locations
+  specified by the <address> field
+
+Also see :-
+            Numeric format
+            Org
+            Kickoff
+            Setbyte
+            Hot keys
+
+register box
+ Register box 
+
+ The second window from left called the register box, displays the
+ contents of registers.(all values are in hexadecimal)
+
+ Apart from general purpose registers, values of 'IP' and 'SP'
+ are also shown
+
+   ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¬
+   √ a   =   00  ƒ
+   √ b   =   00  ƒ
+   √ c   =   00  ƒ
+   √ d   =   00  ƒ
+   √ e   =   00  ƒ
+   √ h   =   00  ƒ
+   √ l   =   00  ƒ
+   √ [HL]= 00c9  ƒ
+   √ IP  = 0100  ƒ
+   √ SP  = 3ff0  ƒ
+   ≈∆∆∆∆∆∆∆∆∆∆∆∆∆«
+
+
+  [HL] :- This is is display of the contents of memory location where
+          the 'HL' register pair points to.
+          The string 'Invalid' is displayed if 'HL' points beyond
+          valid memory limits
+
+  Also see :-
+              changing memory data
+              changing register data
+              changing flags
+              changing instructions
+              Switching windows
+ 
+ memory dump box
+  Memory dump box 
+ The third window from left is where you see a hex dump of the entire
+ memory location.
+
+ TAB/SHIFT+TAB can be used to switch to the memory dump box.
+
+   ¿¡¡¡¡¡¡¡¡¡¡¬
+   √ 0000: c9 ƒ
+   √ 0001: 00 ƒ
+   √ 0002: 00 ƒ
+   √ 0003: 00 ƒ
+   √ 0004: 00 ƒ
+   √ 0005: 00 ƒ
+   √ 0006: 00 ƒ
+   √ 0007: 00 ƒ
+   √ 0008: c9 ƒ
+   √ 0009: 00 ƒ
+   ≈∆∆∆∆∆∆∆∆∆∆«
+
+
+  Also see :-
+             changing memory data            Switching windows
+             changing register data
+             changing flags
+             changing instructions
+
+ 
+ changing register data
+  Changing Register data 
+
+  switch to the register box using TAB/SHIFT+TAB and position
+  the 'current position' bar where you want to change the data.
+
+  In addition to changing the value of all internal registers, it is
+  also possible to change the value of 'IP', 'SP' and the contents
+  of memory location pointed by [HL]
+
+  A input box will pop up when you press any key(I insist, any key).
+  You can key in an 8 bit or 16 bit number.  16 bit numbers can be
+  keyed in only for register pairs, and 16 bit registers like
+  'IP' and 'SP'.
+
+  +/- - can also be used to increment/decrement the contents of any
+  register.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  When the 'current position' bar is placed on the 'IP' the value
+  of 'IP' dosen't change to the Next/Previous instruction but is
+  only incremented/decremented by 1.  Hence it is possible to make
+  'IP' point into the middle of a current instruction.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  Backspace/Alt+Backspace can be used at any time to goto the
+  previous/next instruction.
+
+  Also see :-
+             changing memory data            Switching windows
+             changing flags
+             changing instructions
+ 
+ flag box
+  Flag box 
+  The rightmost window is called the flag box, which displays
+  the flag status.
+
+  +/- can be used to toggle the flags.
+
+  ¿¡¡¡¡¡¬
+  √ c=1 ƒ
+  √ s=0 ƒ
+  √ z=1 ƒ
+  √ p=1 ƒ
+  √ a=0 ƒ
+  ≈∆∆∆∆∆«
+
+  Also see :-
+             changing memory data            Switching windows
+             changing register data
+             changing instructions
+ 
+ led box
+  Led display box 
+
+  The left bottom window is the 7 segment led display box.
+
+  The led's can be used to display data with the help of system calls
+
+  The left most 2 led's are called the  Status field
+  The right most 2 led's are called the Data field
+  The middle 4 led's are called the     Address field
+
+   Status field     Address field      Data field
+  ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬
+  √       __     __        __   __      __   __   ƒ
+  √    |  __|    __| |__| |__  |__        | |__|  ƒ
+  √    | |__     __|    |  __| |__|       | |__|  ƒ
+  √                                               ƒ
+  ≈∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆«
+
+  Also see :-
+             Instructions
+             system calls
+ 
+  +/- can be used to toggle the flags.
+
+  Also see :-
+             changing memory data            Switching windows
+             changing register data
+             changing instructions
+ 
+ Numeric format
+  Numeric format 
+
+  All numbers are by default assumed to be in hex, unless specified
+  otherwise.  The user can force the interpretaion to be Decimal
+  by appending a '#' at the end of the number.
+  Similarly a number is taken as octal if it ends with a 'O' and
+  binary if it ends with a 'i'.
+
+  eg :-    26     ; interpretted as hex     (decimal value=38)
+           26#    ; interpretted as decimal (decimal value=26)
+           26O    ; interpretted as octal   (decimal value=22)
+           101i   ; interpretted as binary  (decimal value=5 )
+
+  Note :-  Hexadecimal numbers starting with 'a','b','c','d','e','f'
+           should be prepended with a 0.  If this is not done, the
+           parser will assume the number to be a label
+ 
+ register
+ registers
+  Registers 
+
+  The 8085 has six general-purpose registers namely
+  A,B,C,D,E,H,L.  - All these registers are 8 bits long
+  BC  DE & HL can be used as register pairs to perform 16 bit
+  data manipulation.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  Accumulator:- The accumulator or register A is an 8 bit register
+  used to store and perform 8 - bit arithmetic and logical operations.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  Program counter (PC):- This 16-bit register deals with the operation
+  of sequencing the execution of instruction.  This register is a memory
+  pointer.  memory locations have 16-bit address, and hence the 8085
+  can access only 64K of Ram at the most.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+  Stack Pointer (SP):- The stack pointer is also a 16-bit register
+  used as a memory pointer.  When data is pushed onto the stack the
+  contents of stack pointer are decremented and then data is stored
+  at the memory location pointed by SP
+  The popping operation is reverse of the pushing operation
+
+  Also see :-
+             Instructions
+             push
+             pop
+             Switching windows
+
+             changing memory data           changing register data
+             changing flags                 changing instructions
+
+ 
+ flag
+ flags
+  Flags 
+
+ The 8085 has 5 flags indicating the result of the last
+ Arithmetic/Logical operation
+
+ The bit positions reserved for flags are as follows :-
+
+      D7         D6        D4          D2         D0      
+   ¿¡¡¡¡¡¡¬   ¿¡¡¡¡¡¡¬   ¿¡¡¡¡¡¡¬   ¿¡¡¡¡¡¡¬   ¿¡¡¡¡¡¡¬   
+   √  S   ƒ   √  Z   ƒ   √  Ac  ƒ   √  P   ƒ   √  Cy  ƒ   
+   ≈∆∆∆∆∆∆«   ≈∆∆∆∆∆∆«   ≈∆∆∆∆∆∆«   ≈∆∆∆∆∆∆«   ≈∆∆∆∆∆∆«   
+
+  The descriptions and conditions of the flags are as follows :
+
+  S - Sign flag      :-   After the execution of an arithmetic or
+  logic operation, if bit D7 of the result (usually in the accumulator)
+  is 1, sign flag is set.  This flag is used with signed numbers.
+  In a given byte, if D7 is 1, the number will be viewed as a negative
+  number; if it is 0, the number will be considered positive.
+  In arithmetic operations with signd numbers, bit D7 is reserved for
+  indicating the sign, and the remaining seven bits are used to
+  represent the magnitude of a number.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+
+  Z - Zero flag      :-   The zero flag is set if the ALU operation
+  results in 0, and the flag is reset if the result is not 0.  This
+  flag is modified by the results in the accumulator as well as in the
+  other registers.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+
+  Ac- Auxiliary flag :-   In an arithmetic operation, when a carry
+  is generated by digit D3 and passed on to digit D4, the Ac flag is
+  set.  The flag is used only internally for BCD operations, and is
+  not available for the programmer to change the sequence of a program
+  with a jump instruction.
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+
+  P - Parity flag    :-   After an arithmetic or logical operation,
+  if the result has an even number of 1's, the flag is set.  If it
+  has an odd number of 1's the flag is reset.
+  (eg :- the data byte 00000011 has even parity even if the magnitude
+  of the number is odd)
+
+  ∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆
+
+
+  Cy- Carry flag     :-   If an airthmetic operation results in a
+  carry, the carry flag is set; otherwise it is reset.  The carry flag
+  also serves as a borrow flag for subtraction.
+
+
+  Also see :-
+             Instructions
+             Switching windows
+             Physical memory size
+
+             changing memory data           changing register data
+             changing flags                 changing instructions
+
+ 
+ Hot keys
+  Hot keys 
+
+     Debugging/Running hot keys
+     Help hot keys
+     Other hot keys
+
+    Note
+    Alt+S  -  Press this key to stop(not quit) the currently executing
+              program.  Now you can press F6 to reload the current
+              program or F3 to get a input box where you can key in
+              the name(including extension) of the new file.
+
+    hlt    -  This stopped state also occurs when you have finished
+              executing a program (i.e., when the hlt instruction
+              has been executed).
+ 
+ Debugging/Running hot keys
+  Debugging/Running hot keys 
+
+  F2      -     Break point (Toggle Breakpoint)
+  F4      -     Goto cursor
+
+  F7      -     Single step through the code
+  F8      -     Step over through the code
+  F9      -     Run the machine continuously until it halts
+  Ctrl+F9 -     Run continuously, but don't refresh display
+  F4      -     Goto cursor
+
+  Also see :-
+             Help hot keys
+             Other hot keys
+ 
+ Help hot keys
+  Help hot keys 
+
+   F1        -     Help
+   Alt+F1    -     Previous help
+   Ctrl+F1   -     Context sensitive help
+
+   TAB       -     Goto next hypertext link
+   SHIFT+TAB -     Goto previous hypertext link
+
+  Other keys available are
+   UP ARROW           DOWN ARROW           PAGE UP        PAGE DOWN
+   CTRL+PAGE UP       CTRL+PAGE UP         CTRL+HOME      CTRL+END
+   CTRL+UP ARROW      CTRL+DOWN ARROW      HOME           END
+
+  Also see :-
+             Debugging/Running hot keys
+             Other hot keys
+ 
+ Other hot keys
+  Other hot keys 
+
+  F3      -     Load a new file.
+
+  F5,^G   -     Goto any position in the current window
+
+  F6      -     Reassemble the current file and reload it into memory.
+
+  F10     -     I know this is what everyone was waiting for
+                This shows everything about who has done this project.
+
+                Watch the scrolling status line
+
+
+  F11,^A  -     If your are in the code box or memory dump box
+                then this key  sets the 'current position' to the
+                instruction pointed by the 'IP'.
+
+  F12     -     This puts you right back into the code box from
+                any window.
+
+  TAB/   -     You can use TAB/SHIFT+TAB to switch to the
+  SHIFT+TAB    next/previous window.
+
+
+  +/-     -     If you are in the code box then you can use this
+                to set the value of 'IP' to the next/previous
+                instruction.  This can be used instead
+                of Backspace/Alt+Backspace.
+
+                If the active window is the register box then it can
+                be used to increment/decrement the values of registers
+
+                If the active window is the memory dump box then it
+                can be used to increment/decrement the contents of the
+                current memory location.
+
+                In the flag box this toggles the value of the flags
+
+  Backspace     -  Set 'IP' to the address of the previous instruction
+
+  Alt+Backspace -  Set 'IP' to the address of the next instruction
+
+
+  Alt+S     -   Stop the machine at any time and bring it to the
+                halted state.  Certain commands like F3
+                (Open new file) and F6(reload from disk) can
+                be performed only after the machine has halted.
+
+  Alt+X     -   Quit the machine entirely at any time and return
+                back to the operating system
+
+
+  Also see :-
+             Debugging/Running hot keys
+             Help hot keys
+ 
+
+ F3
+  F3, Load a new file 
+
+ This command is availabe only after the machine has halted owing
+ to the execution of hlt instruction or by pressing Alt+S or due
+ to a Run time error
+ 
+ F6
+  F6, Reload the existing file 
+
+ Reassemble the current file and reload it into memory.
+ The entire memory is cleared but registers are not reset.
+
+ This command can be availed only if the machine has halted owing
+ to the execution of hlt instruction or by pressing Alt+S or due
+ to a Run time error
+ 
+ Run time errors
+ Run time error
+  Run time errors 
+
+   Tried to read beyond valid memory location
+   Tried to write beyond valid memory location
+   Stack overflow or incorrect initialization
+   Stack underflow or incorrect initialization
+   Tried to execute beyond valid memory location
+   Bad system Call
+   Invalid Opcode encountered
+
+  Also see :-
+              Proposed standard usage
+              Compile time errors
+ 
+ Tried to read beyond valid memory location
+  Tried to read beyond valid memory location 
+
+   This error occurs if the program tries to read beyond the
+   physical memory limit.
+
+   Common reasons
+   1.  Execution of a mov a,m, when HL points outside
+       the physical memory limits.
+   2.  You tried to pop from stack when 'SP' was pointing outside
+       the physical memory limits.
+   3.  Execution of instrcutions like ldax <reg pair> when the
+       value of <reg pair> is larger than physical memory limits.
+   Other instructions which can cause this errors are
+     xthl
+
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+             physical memory limits.
+ 
+ Tried to write beyond valid memory location
+  Tried to write beyond valid memory location 
+
+   This error occurs if the program tries to write beyond the
+   physical memory limit.
+
+   Common reasons
+   1.  Execution of a mov m,a when HL points outside
+       the physical memory limits.
+   2.  Execution of instrcutions like stax <reg pair> when the
+       value of <reg pair> is larger than physical memory limits.
+   3.  Execution of a push instruction when 'SP' points outisde
+       physical memory limits.
+
+   Other instructions which can cause this error are
+     xthl ,stax
+
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+ 
+ Stack underflow or incorrect initialization
+  Stack underflow or incorrect initialization 
+
+  This error occurs if the machine encounters a unconditional or
+  conditional ret  instruction with  'SP' pointing beyond
+  valid physical limits.
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+
+ 
+ Stack overflow or incorrect initialization
+  Stack underflow or incorrect initialization 
+
+  This error will never occur !!!, instead a write fault will
+  be generated.
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+ 
+ Tried to execute beyond valid memory location
+  Tried to execute beyond valid memory location 
+
+   This error occurs if the program tries to execute an instruction
+   with the value of 'IP' set beyond the physical memory limits.
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+ 
+ Bad system Call
+  Bad system Call 
+
+  This error occurs when you try to execute a system calls with wrong
+  data loaded in the registers.
+
+  eg:- There is no system call with a function (i.e. value of reg 'a')
+       number 2f.
+
+  This error could have been overlooked, but was included in the error
+  list so that the programmer can correct logical errors of having
+  loaded the registers with wrong data.
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+ 
+ Invalid Opcode encountered
+  The machine encountered an invalid opcode 
+
+  This error occurs when you try to execute an opcode which does
+  not have an equivalent instruction in the instruction set of
+  the 8085 microprocessor.
+
+  eg :- opcodes  8, 10(hex) etc 
+
+  Though it is not possible to enter an invalid instruction directly,
+  the machine does allow changing the value of data from the
+  memory dump box which in turn change the code.
+
+  other ways of achieving this
+
+    setbyte 500,8  ; place the data '8' at location 500(hex),
+                   ; The value '8' happens to be an invalid opcode.
+
+    org 501
+    mov a,b        ; do something
+
+    kickoff 500    ; now you will start from location 500(hex)
+                   ; which to contain an invalid opcode
+
+
+  Self modifying codes can also do this trick
+
+  Also see :-
+             Compile time errors
+             Proposed standard usage
+ 
+ Compile time errors
+  Compile time errors 
+   Unknown Error
+   Org directive not followed by a number
+   Address in Directive was larger than physical memory
+
+   Immediate number too large
+   A Register name is expected
+   Register or memory expected as operand
+
+   Number expected as operand
+   Comma expected
+   Wrong register specified as operand
+
+   Unwanted operand
+   Immediate Address too large
+   Colon Expected after a label
+
+   Syntax Error
+   Duplicate definition of label
+   Internal Error - Symbol table full
+
+   Label is not defined
+   Memory to Memory transfer not allowed
+
+
+  Also see :-
+             Run time errors
+             Proposed standard usage
+             Physical memory size
+             Numeric format
+ 
+
+Unknown Error
+ Unknown Error 
+
+  This error is mostly probably generated when the assembler
+  encounters a illegal character or a character that is not
+  expected at that position.
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Org directive not followed by a number
+ Org directive not followed by a number 
+
+  A number did not follow a org directive.
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Address in Directive was larger than physical memory
+ Address in Directive was larger than physical memory 
+
+  The address specified in the org directive was larger than
+  the Physical memory size
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Immediate number too large
+ Immediate number too large 
+
+ The immediate number specified was larger than the maximum possible.
+ The 'maximum possible' number depends on whether the current
+ instruction/directive expects a 8 bit or 16 bit number.
+
+ Hence this message is context sensitive.
+ eg :-
+        mvi     a,567 would generate this error whereas
+        setword 500,567 will not
+
+ Note :- This error is caught in the second pass 
+
+A Register name is expected
+ A Register name is expected 
+
+ A register name was expected after an instruction
+
+  eg :-  mov t,a is wrong because 't' is not a valid register
+         name
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Register or memory expected as operand
+ Register or memory expected as operand 
+
+ A register or 'm' was expected after an instruction
+
+  eg :-  mov a,q is wrong because 'q' is not a valid register name
+          or memory
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Number expected as operand
+ Number expected as operand 
+
+ A number was expected as operand of an instruction.
+ This error could also occur if a hexadecimal number
+ was not preceeded with a '0'
+
+  eg :-  mvi a,ab will be flagged as an error
+  This is because the parser is unable to distinguish between
+  the number 'ab' and a variable name 'ab'
+
+  To overcome this problem, a '0' should be prepended to a
+  hexadecimal number which starts with 'a','b','c','d','e' or 'f'.
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Comma expected
+ Comma expected 
+
+ A Comma was expected.
+
+ This error occurs if you miss a comma between two operands
+
+  eg :-  mvi a b will be flagged as an error
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Wrong register specified as operand
+ Wrong register specified as operand 
+
+ A register supplied as an operand cannot take part in that instruction
+
+  eg :-  push c will be flagged as an error
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Unwanted operand
+ Unwanted operand 
+
+ An operand was supplied to an instruction which was not required
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Immediate Address too large
+ Immediate Address too large 
+
+ The immediate address specified was larger than the,
+ Physical memory size
+
+ eg:- lhld 8000(hex) will generate this error if the machine
+ has physical memory less than this.
+
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Colon Expected after a label
+ Colon Expected after a label 
+
+ A colon ':' should follow a label
+
+ eg:- loop:  inx b       ; increment value of b
+             jnz loop    ; jump if not zero
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Syntax Error
+ Syntax Error 
+
+ The parser encountered a syntax error.
+
+ This is a general purpose error message and will occur when an input
+ character cannot be recognised
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Duplicate definition of label
+ Duplicate definition of label 
+
+ You have defined a label twice in your source program
+
+ eg :-  loop1 :  inx b
+        loop1 :  mov c,b    ; 'loop1' has been already defined above
+                 jnz loop1
+                 dcr b    
+                 jnz loop1
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Internal Error - Symbol table full
+ Internal Error - Symbol table full 
+
+ You can do very little about this.
+ The maximum number of labels that you can define is 256
+
+ An alternative would be to give absolute jumps.
+
+ I was forced because the compiler issued the error
+ message Too much global data
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Label is not defined
+ Label is not defined 
+
+ A jmp or a call instruction referred to a label which was
+ not defined.
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Memory to Memory transfer not allowed
+ Memory to Memory transfer not allowed 
+
+ A mov instruction cannot move data from one memory location to
+ another memory location.
+ i.e., mov m,m is not allowed.
+
+ Instead, move the data into a register and then to the specified
+ memory location.
+
+ Also see :-
+            valid characters
+            Run time errors
+            Proposed standard usage
+            Numeric format
+
+Bad Number format
+ Bad Number format 
+
+   This error could be generated due to the following reasons.
+
+   1. The parser encountered a character which is not a number.
+   2. The parser encountered a invalid  number for the base specified
+      i.e., a 9 was included in an octal number or say a 3 in a binary
+      number, etc.
+   3. The number was larger than 0ffffffffH
+
+ Also see :-
+            Numeric format
+
+Invalid value for IP
+ Invalid value for IP 
+
+   The address you entered for the Instruction Pointer was larger
+   than the physical memory size
+
+ Also see :-
+            Numeric format
+
+Number too large
+ Number too large 
+
+   The number specified was too large.
+
+ Also see :-
+            Numeric format
+
+Value not within legal range
+ Value not within legal range 
+
+   The address entered was beyond physical memory limits
+
+physical memory size
+Physical memory size
+physical memory limits
+ Physical memory size 
+
+ The physical memory size of the machine is 16 K.
+
+ But don't believe this help file, instead do the following.
+ Press 'END' in code box or memory dump box to find out the actual
+ physical main memory size
+
+instructions
+instruction
+Instruction
+Instructions
+ The 8085 Instruction set 
+
+    Data transfer
+    Arithmetic
+    Logical
+    Branching
+    Control
+
+ Also see :-
+            Legend
+
+Legend
+ Legend 
+
+  The abbrevations used in the description of the instruction set.
+
+                                              Flags
+  Reg = 8085 Registers             ƒ
+  Mem = Any memory location        ƒ      S  =  Sign
+  R   = Register                   ƒ      Z  =  Zero
+  Rs  = Register Source            ƒ      Ac =  Auxiliary Carry
+  Rd  = Register Destination       ƒ      P  =  Parity
+  M   = memory                     ƒ      Cy =  Carry
+  [ ] = Contents of                ƒ
+  XX  = Random Information         ƒ
+
+Functional groups
+ 8085 Instruction summary by functional group 
+
+    Data transfer
+    Arithmetic
+    Logical
+    Branching
+    Control
+
+Data transfer
+ 8085 Data transfer Instructions 
+
+   mov       mvi       ldax       lhld       lda
+
+   stax      shld      sta        lxi        sphl
+
+   xthl      xchg      out        in         push
+
+   pop
+
+Arithmetic
+ 8085 Arithmetic Instructions 
+
+   add       adc       adi        aci       sub
+
+   sbb       sui       sbi        dad       daa
+
+   inr       inx       dcr        dcx
+
+Logical
+ 8085 Logical Instructions 
+
+   stc       ana       ani        xra       xri
+
+   ora       ori       cmp        cpi       rlc
+
+   rrc       ral       rar        cma       cmc
+
+Branching
+ 8085 Branching Instructions 
+
+  jmp       jnz       jz         jnc       jc
+
+  jpo       jpe       jp         jm        pchl     rst
+
+ ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+  call      cnz       cz         cnc       cc
+
+  cpo       cpe       cp         cm
+
+ ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+  ret       rnz       rz         rnc       rc
+
+  rpo       rpe       rp         rm
+
+Control
+ 8085 Control Instructions 
+
+   nop       hlt       di
+
+   ei        rim       sim
+
+System calls
+system calls
+system call
+  System calls 
+
+    Reset                              ƒ     Generate tone
+    Blank display                      ƒ     Delay routine
+    Display dot                        ƒ     A/D Conversion
+    Display data                       ƒ     Display HL data
+    Display the Message "Err"          ƒ     Data from keyboard
+
+    Read from Keyboard                 ƒ     Code conversion
+    Display data using memory pointer  ƒ     Length of Block
+    Serial Input from COM1/COM2        ƒ     Print data
+    Serial Output to COM1/COM2         ƒ     Print CRLF
+
+    Extra functionality 1              ƒ     Extra functionality 2
+    Original Delay routine
+
+ Also see :-
+             Registers affected
+ 
+ Registers affected
+  Registers affected 
+
+    None of the registers are affected in a system call.
+    However in a conventional microprocessor kit, registers are
+    affected in almost all systems call.  It is the responsibility
+    of the programmer to save them and then restore them after
+    the system call.
+ 
+ Reset
+  Reset 
+
+     This function resets the Microprocessor kit
+
+          Input     :  A  = 00
+                       CALL 0005
+          Output    :  None
+
+     Note :-  For obvious reasons this system call has been
+              implemented in such a manner that it has no effect
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Blank display
+  Blank display 
+
+     This function blanks the 7 segment display
+
+          Input     :  A = 01
+                       C = 00,01,02,03
+                       CALL 0005
+
+     (a)  if c=00, the Address field display is blanked
+     (b)  if c=01, the data field display is blanked
+     (c)  if c=02, the status field display is blanked
+     (d)  if c=03, all the digits of display is blanked
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Display dot
+  Display dot 
+
+   This function displays the DOT in any of the digit depending
+   on the C register content.
+
+          Input     :  A = 02
+                       C = 00,01,02,03
+                       CALL 0005
+
+     (a)  if c=00, dot will be displayed in the right most of
+                   the data field.
+     (b)  if c=01, dot will be displayed in the right most of
+                   the address field.
+     (c)  if c=02, dot will be displayed in the right most of
+                   the upper two digits of the address field.
+     (d)  if c=03, dot will be displayed in the right most
+                   digit of the status field.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Display data
+  Display data 
+
+   This function display the data, which are in the memory addressed
+   by HL register.  Using 'C' register, data can be displayed in any
+   area of the 7 segment Display
+
+          Input     :  A = 03
+                       C = 00 to 0A
+                       CALL 0005
+
+   (a)  if c=00, the data from the memory pointed by the HL register
+        will be displayed in the first digit of the display.  The
+        first digit corresponds to the leftmost 7 segment display.
+
+   (b)  if c=08, 2 digit data will be displayed in the data field,
+        two digits will be taken from memory pointed by
+        (HL) and (HL+1)
+   (c)  if c=09, 4 digit data will be displayed in the address field
+   (d)  if c=0A, 2 digit data will be displayed in the status field
+   (e)  if c=0B, 8 digit data will be displayed in all the eight 7
+        segment display.
+
+   The following Alphanumeric can be displayed in the 7 segment display
+   of the machine
+
+                  Data format for 7 segment Display
+                  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+   Alphanumeric to be displayed               Corresponding data to be
+                                                  loaded in memory
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+           1                                            1
+           2                                            2
+           3                                            3
+           4                                            4
+           5                                            5
+           6                                            6
+           7                                            7
+           8                                            8
+           9                                            9
+           A                                            A
+           B                                            B
+           C                                            C
+           D                                            D
+           E                                            E
+           F                                            F
+           BLANK ------------------------------------> 10
+           DOT                                         11
+           HYPHED(--)                                  12
+           G                                           13
+           H ----------------------------------------> 14
+           L                                           15
+           t ----------------------------------------> 16
+           N                                           17
+           n ----------------------------------------> 18
+           o                                           19
+           P ----------------------------------------> 1A
+           R                                           1B
+           r ----------------------------------------> 1C
+           U                                           1D
+           Y ----------------------------------------> 1E
+           Ê                                           1F
+           u ----------------------------------------> 20
+           l                                           21
+           x ----------------------------------------> 26
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Display the Message "Err"
+  Display the Message "Err" 
+
+   This function will display "Err" in the display and blank the
+   remaining led's
+
+          Input     :  A = 04
+                       CALL 0005
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Read from Keyboard
+  Read from keyboard 
+
+   This function will read a key and return the key code in
+   A register
+
+          Input     :  A = 05
+                       CALL 0005
+
+          Output    :  A = code of the key
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Code conversion
+  Hex to ASCII & ASCII to Hex code conversion 
+
+   When Reg 'C' is 00 this function converts a hex value to its
+   equivalent ASCII value.  The 8 bit hex data will be converted
+   to 2 ASCII values.
+          Input     :  A = 06
+                       C = 00
+                       L = hex value
+          Output    :  DE register will have the ASCII values
+                       D - Higher byte,
+                       L - Lower byte
+          Result    :  DE will have the ASCII value.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+   When Reg 'C' is 01 this function converts two ASCII values to its
+   equivalent 8 bit Hex value.
+          Input     :  A = 06
+                       C = 01
+                       H = Higher byte ASCII value
+                       L = Lower byte ASCII value
+          Output    :  A contains the hex value
+          Result    :  A will be returned with the 8 bit
+                       hex value.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Length of Block
+  Calculate length of a block 
+
+   This function calculates the length of a block of memory.
+
+          Input     :  A = 07
+                       HL = Starting address of the memory
+                       BC = End address of the memory
+                       CALL 0005
+
+          Output    :  DE contains the block size.
+
+   Note :- if HL>BC, then a Bad system call  error message will
+           be generated.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Generate tone
+  Generate tone 
+
+   This function generates a tone for driving a speaker.
+
+          Input     :  A = 08
+                       C = 00,01
+                       CALL 0005
+
+          Result    :  Generates a constant frequency for the speaker
+                       for a time period of 8 millisecond.
+
+          When C=00, it generates 1 KHz
+          When C=01, it generates 2 KHz
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Delay routine
+  Delay routine 
+
+          Input     :  A  = 09
+                       HL = Delay value
+                       CALL 0005
+
+          Result    :  The delay time is equal to the value of
+                       HL*7 clock ticks of the PC's clock.
+                       (i.e., 7/18.2)
+
+   I have used clock ticks so that the delay time is independent of
+   whether the processor is in the turbo mode or not.
+
+   Also see :-
+           Original Delay routine
+
+   Note :- In the microprocessor kit the delay value is calculated
+           in microseconds.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+ 
+ A/D Conversion
+  Routine for A/D conversion 
+
+
+   Note :- This function has not been implmented.
+           A call to this function will simply be ignored
+
+
+
+          Input     :  A  = 0A
+                       C = Channel number
+                       CALL 0005
+
+          Output    :  Digital value in A register.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Display HL data
+  Display HL data 
+
+          Input     :  A  = 0B
+                       C  = 00,01,02
+                       HL = Data to be displayed
+                       CALL 0005
+
+     (a) When C=00, contents of L are displayed in the status field
+     (b) When C=01, contents of H and L are displayed in the Address
+         field
+     (c) When C=02, contents of L are displayed in the Data field
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Data from keyboard
+  Data from keyboard 
+
+          Input     :  A  = 0C
+                       C  = 00,01
+                       CALL 0005
+
+          Output    :  HL - contains the data got from keyboard
+
+     (a) When C=00, 4 keys are read and stored as 16 bit data in HL.
+         The  data  read,  is  also  displayed in the address field.
+     (b) When C=01,  2 keys  are read and stored as 8 bit data in L.
+         The  data  read,  is  also  displayed  in  the  data field.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+ Display data using memory pointer
+  Display data using memory pointer 
+
+          Input     :  A  = 0D
+                       C  = 00,01,02,03
+                       HL = Memory pointer
+                       CALL 0005
+
+     (a) When C=00, displays data in Status field.
+     (b) When C=01, displays data in Address field.
+     (c) When C=02, displays data in Data field.
+     (d) When C=03, displays data in all 8 digits.
+
+     HL - points to the address whose contents are the 7 segment
+     display  codes for the data to be displayed.  the 7 segment
+     display format in accordance with the data bys is as:
+
+      Data bus     D7   D6   D5    D4    D3    D2    D1    D0
+      7 Segment     d    c    b     a    dp     g     e     f
+           code
+
+                                    
+                        _______     
+                      f|   a   |b   
+                       |_______|    
+                      e|   g   |c   
+                       |_______|    
+                           d        
+
+      Note :- A zero in the corresponding segment will make that
+              segment glow.
+
+   ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+ 
+Serial Input from COM1/COM2
+ Serial input data from COM1/COM2 
+
+         Input     :  A  = 0E
+                      C  = 00,01
+                      B  = Data from COM1/COM2
+                      CALL 0005
+
+         Result    :  Serial input a single byte from
+                      COM1/COM2.
+
+    (a) When C=00, then serial input from COM1.
+    (b) When C=01, then serial input from COM2.
+
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Serial Output to COM1/COM2
+ Serial Output data through COM1/COM2 
+
+         Input     :  A  = 0F
+                      C  = 00,01
+                      B  = Data to output serially.
+                      CALL 0005
+
+         Result    :  Serial out serially through
+                      COM1/COM2.
+
+    (a) When C=00, then serial output through COM1.
+    (b) When C=01, then serial output through COM2.
+
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Print data
+ Prints data to printer 
+
+         Input     :  A  = 010
+                      C  = 00,01
+                      B  = Data to be printed
+                      CALL 0005
+
+    (a) When C=00, contents of B are printed as an ASCII character.
+    (b) When C=01, contents of B are printed as data.
+
+    If the printer is not connected, then the program waits for  the
+    time out signal and issues an appropriate warning after the time
+    out.
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Print CRLF
+ Prints a Carriage and a Linefeed 
+
+         Input     :  A  = 011
+                      CALL 0005
+
+         Prints a Carriage and a Linefeed.
+
+    If the printer is not connected, then the program waits for  the
+    time out signal and issues an appropriate warning after the time
+    out.
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Extra functionality 1
+ Read data from any port 
+
+         Input     :  A  = 012
+                      HL = port number
+                      D  = 00,01
+                      CALL 0005
+
+    (a) When D=00, a byte of data is read from the specified
+        port and stored in register B.
+    (b) When D=00, a word of data is read from the specified
+        port and stored in register pair BC.
+
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Extra functionality 2
+ Write data to any port 
+
+         Input     :  A  = 013
+                      HL = port number
+                      BC = data
+                      D  = 00,01
+                      CALL 0005
+      Data is sent to the port as specified by the port number in 'HL' pair.
+      if 'D' = 0 then 1 byte of data from register 'B' is sent to the
+      specified port.
+      if 'D' = 1 then 1 word of data from register pair 'BC' is sent to the
+      specified port.
+
+    (a) When D=00, one byte of data from register 'B' is sent
+        to the port specified by the HL pair.
+    (b) When D=01,  one  word  of data from register pair 'BC'
+        is sent to the port specified by the HL pair.
+
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+Original Delay routine
+ Original Delay routine 
+
+         Input     :  A  = 14
+                      HL = Delay value
+                      CALL 0005
+
+         Result    :  The delay time is equal to the value of
+                      HL*6.9 milliseconds.
+
+    Note :- In the microprocessor kit the delay value is calculated in
+            microseconds.
+
+ Also see :-
+           Delay routine
+
+  ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+
+
+aci
+ Aci , Add immediate to accumulator with carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ACI        8-bit data        2       2          7          CE
+
+
+ Description:-   The  8-bit  data  and  carry  flag  are added to the
+ contents  of  the  accumulator,  and  the  result  is  stored in the
+ accumulator.
+
+ Flag:- All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 26H                           Cy=1
+
+ Instruction  :-    ACI 57H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 7EH                  S=0, Z=0, Ac=0, P=1, Cy=0
+
+ Comments     :-
+ 1. After adition the previous carry flag is cleared.
+ 2. This  instruction  is  commonly  used  in  16-bit addition.  This
+    instruction  should  not be used to account for a carry generated
+    by 8-bit numbers.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+adc
+ Adc, Add register to accumulator with carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ADC          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem                     2          7     ƒ  B    88  ƒ
+                                                         ƒ  C    89  ƒ
+                                                         ƒ  D    8A  ƒ
+                                                         ƒ  E    8B  ƒ
+                                                         ƒ  H    8C  ƒ
+                                                         ƒ  L    8D  ƒ
+                                                         ƒ  M    8E  ƒ
+                                                         ƒ  A    8F  ƒ
+
+
+ Description:-    The contents of the operand (register or memory) and
+ and  the  Carry flag are added to the contents of the accumulator and
+ the result is placed in the accumulator.  The contents of the operand
+ are not altered; however the previous carry flag is reset.
+
+ Flag:-  All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 98H                           Cy=1
+                     C = A1H
+ Instruction  :-    ADC C
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 3AH                S=0, Z=0, Ac=0, P=1, Cy=0
+
+ Comments     :-
+ 1. After adition the previous carry flag is cleared.
+ 2. This  instruction  is  commonly  used  in 16-bit addition.   This
+    instruction  should  not be used to account for a carry generated
+    by 8-bit numbers.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+add
+ Add, Add register to accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ADD          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem                     2          7     ƒ  B    80  ƒ
+                                                         ƒ  C    81  ƒ
+                                                         ƒ  D    82  ƒ
+                                                         ƒ  E    83  ƒ
+                                                         ƒ  H    84  ƒ
+                                                         ƒ  L    85  ƒ
+                                                         ƒ  M    86  ƒ
+                                                         ƒ  A    87  ƒ
+
+
+ Description:-  The contents of the operand (register or memory) are
+ added  to the contents of the accumulator and the result is placed in
+ the  accumulator.   If  the  operand  is  a  memory location, that is
+ indicated by the 16-bit address in HL register.
+
+ Flag:-  All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 47H
+                     B = 51H
+ Instruction  :-    ADD B
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 98H                S=1, Z=0, Ac=0, P=0, Cy=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A    = 76H
+                     HL   = 2050
+                     [HL] = A2H
+
+ Instruction  :-    ADD B
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 18H                S=0, Z=0, Ac=0, P=1, Cy=1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+adi
+ Adi, Add immediate to accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ADI        8 bit data        2       2          7          C6
+
+
+ Description:-  The 8-bit data(operand) are added to the contents  of
+ the accumulator, and the result is placed in the accumulator.
+
+ Flag:-  All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 4AH
+ Instruction  :-    ADI 59H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = A3H                S=1, Z=0, Ac=1, P=1, Cy=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ana
+ Ana, logical and with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ANA          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem             1       2          7     ƒ  B    A0  ƒ
+                                                         ƒ  C    A1  ƒ
+                                                         ƒ  D    A2  ƒ
+                                                         ƒ  E    A3  ƒ
+                                                         ƒ  H    A4  ƒ
+                                                         ƒ  L    A5  ƒ
+                                                         ƒ  M    A6  ƒ
+                                                         ƒ  A    A7  ƒ
+
+
+ Description:-   The  contents of the accumulator are logically  ANDed
+ with the contents of the operand(retister of memory), and the  result
+ is  placed  in the accumulator.  If the operand is a memory location,
+ its address is specified by the contents of HL register.
+
+ Flag:-  S, Z, P  are modified to reflect the result of the operation.
+ CY is reset and AC is set.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 54H
+                     D = 82H
+ Instruction  :-    ANA D
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 00H                S=0, Z=1, Ac=1, P=1, Cy=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ani
+ Ani, and immediate with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ANI        8 bit data        2       2          7          E6
+
+
+ Description:-    The  contents of the accumulator are logically ANDed
+ with  the  8-bit  data(operand)  and  the  results  are placed in the
+ accumulator.
+
+ Flag:-  S, Z, P  are modified to reflect the result of the operation.
+ CY is reset and AC is set.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = A3H
+ Instruction  :-    ADI 97H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 83H                S=1, Z=0, Ac=1, P=0, Cy=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+call
+ Call, branch to a subroutine 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CALL     16-Bit Address      3       5          18          CD
+
+
+ Description:-   The  program  sequence  is transferred to the address
+ speficied  by  the  operand.  Before the transfer, the address of the
+ next  instruction  to  CALL  (the contents of the program counter) is
+ pushed  on  the  stack.   The  sequence of events is described in the
+ example below.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-   Write CALL instruction at memory location 2010H to call a
+ subroutine located at 2050H.  Explain the sequence of events when the
+ stack pointer is at location 2099H.
+
+ Memory Address:-     Hex code     Mnemonics
+    2010                CD         CALL 2050H
+    2011                50
+    2012                20
+
+ Note:-  The address is stored in reverse byte sequence.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Execution of call:- The address in the program is placed on the stack
+ as follows.
+  1. Stack pointer is decremented.
+  2. MSB is stored.
+  3. Stack pointer is again decremented.
+  4. LSB is stored
+  5. Call  address  is temporarily stored in internal WZ registers and
+     placed on the bus for the fetch cycle.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Note:-  A call to address 0005 will not invoke your subroutine even if
+ you  have  placed  one,  instead  it  will  result in the execution of a
+ system call.
+
+cc
+cnc
+cp
+cm
+cpe
+cpo
+cz
+cnz
+ CC, CNC, CP, CM, CPE, CPO, CZ, CNZ Conditional calls 
+
+ All the conditional calls have the format:-
+  conditional call 16-bit address 
+
+
+  Opcode    Description           Flag       Hex    M-Cycles/T-States
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CC      Call on Carry          CY=1       DC   ƒ
+   CNC     Call with no Carry     CY=0       D4   ƒ (Applicable to all)
+                                                  ƒ
+   CP      Call on positive       S =0       F4   ƒ 2M/9T  if condition
+   CM      Call on minus          S =1       FC   ƒ is not true
+                                                  ƒ
+   CPE     Call on Parity Even    P =1       EC   ƒ 5M/17T if condition
+   CPO     Call on Parity Odd     P =0       E4   ƒ is true
+                                                  ƒ
+   CZ      Call on Zero           Z =1       CC   ƒ
+   CNZ     Call on No Zero        Z =0       C4   ƒ
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Flag:-  No flags are affected.
+
+ Note:-  A call to address 0005 will not invoke your subroutine even if
+ you  have  placed  one,  instead  it  will  result in the execution of a
+ system call.
+
+cma
+ Cma, Complement accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CMA           None           1       1          4          2f
+
+
+ Description:-    The  contents  of  the  accumulator are complemented
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 89H
+ Instruction  :-    CMA
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 76H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+cmc
+ Cmc, Complement carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CMC           None           1       1          4          3F
+
+
+ Description:-    The  carry flag is complemented.
+
+ Flag:-  The carry flag is modified, no other flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+cmp
+ Cmp, Compare with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CMP          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem             1       2          7     ƒ  B    B8  ƒ
+                                                         ƒ  C    B9  ƒ
+                                                         ƒ  D    BA  ƒ
+                                                         ƒ  E    BB  ƒ
+                                                         ƒ  H    BC  ƒ
+                                                         ƒ  L    BD  ƒ
+                                                         ƒ  M    BE  ƒ
+                                                         ƒ  A    BF  ƒ
+
+
+ Description:-   The  contents  of the operand(register or memory) are
+ compared  with  the  contents  of the accumulator.  Both contents are
+ preserved and the compariosn is shown by setting the flags as follows
+ its address is specified by the contents of HL register.
+
+   if A<(reg/mem):  Carry flag is set.
+   if A=(reg/mem):  Zero flag is set.
+   if A>(reg/mem):  Carry and Zero flags are reset.
+
+ The  comparison of two bytes is performed by subtracting the contents
+ of the operand from the contents of the accumulator; however, neither
+ contents are modified.
+
+ Flag:-   S, P, Ac  are modified in addition to Z and C to reflect the
+ results of the operation.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 57H
+                     B = 62H
+ Instruction  :-    CMP B
+
+ Result       :-    Regs/Mem                           Flags
+                                            S=1, Z=0, Ac=1, P=1, Cy=1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+  Note:-  No register contents are changed
+
+cpi
+ Cpi, Compare immediate with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   CPI           8-bit          2       2          7           FE
+
+
+ Description:-    The  second  byte (8-bit data)  is compared with the
+ accumulator.   The  value  being  compared  remain  unchanged and the
+ results  of  the  comparison  are  indicated  by setting the flags as
+ follows.
+
+   if A<(reg/mem):  Carry flag is set.
+   if A=(reg/mem):  Zero flag is set.
+   if A>(reg/mem):  Carry and Zero flags are reset.
+
+ The comparison of two bytes is performed by subtracting the data byte
+ of the accumulator; however, neither contents are modified.
+
+ Flag:-   S, P, Ac  are modified in addition to Z and C to reflect the
+ results of the operation.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = C2H
+ Instruction  :-    CPI 98H
+
+ Result       :-    Regs/Mem                           Flags
+                                            S=0, Z=0, Ac=0, P=0, Cy=0
+
+ ˛ The accumulator contents remain unchanged.
+ ˛ Z and CY flags are reset because [A] > Data
+ ˛ Other flags: S=0, AC=0, P=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = C2H
+ Instruction  :-    CPI C2H
+
+ Result       :-    Regs/Mem                           Flags
+                                            S=0, Z=1, Ac=0, P=1, Cy=0
+
+ ˛ The accumulator contents remain unchanged.
+ ˛ Z and CY flags are reset because [A] = Data
+ ˛ Other flags: S=0, AC=0, P=1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+  Note:-  No register contents are changed
+
+daa
+ Daa, Decimal adjust accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   DAA           none           1       1          4           27
+
+
+ Description:-   The  contents  of  the accumulator are changed from a
+ binary value to two 4-bit binary coded decimal(BCD) digits.   This is
+ the  only  instruction  that  uses  the auxiliary flag(internally) to
+ perform the binary to BCD conversion, and the conversion procedure is
+ described below.
+
+ Flag:-  S, Z, Ac, P, CY  flags  are altered to reflect the results of
+ the operation.   Instruction  DAA  converts  the  binary  contents of
+ the accumulator as follows:
+
+ 1. If  the value of the low-order 4-bits(D3-D0) in the accumulator is
+    greater than 9 or if AC flag is set, the instruction adds 6 to the
+    low-order four bits.
+ 2. If the value of the high-order 4-bits(D7-D4) in the accumulator is
+    greater than 9 or if the carry flag is set, the sintruction adds 6
+    to the high-order four bits.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-  Add decimal 68(BCD) to the accumulator, which contains
+            85(BCD)
+
+              A =   85(BCD)    =    1 0 0 0   0 1 0 1
+                  + 68(BCD)    =    0 1 1 0   1 0 0 0
+                 ¡¡¡¡¡¡¡¡¡¡¡¡      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                   153(BCD)    =    1 1 1 0   1 1 0 1
+
+ The  binary sum is EDH.  The values of both, low-order and high-order
+ four bits are higher than 9.  Add 6 to both.
+                =   ED         =    1 1 1 0   1 1 0 1
+                  + 66         =    0 1 1 0   0 1 1 0
+                                    1 1   1   1
+                 ¡¡¡¡¡¡¡¡¡¡¡¡      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                   153(BCD)    = 1  0 1 0 1   0 0 0 1
+                                
+                   Cy            Cy
+
+ The  accumulator  contains  53  and the carry flag is set to indicate
+ that the sum is larger than eight bits(153).
+
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+dad
+ Dad, Add register pair to H and L registers 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   DAD        reg-pair         1       3           10    ƒ Reg   Hex ƒ
+                                                         ƒ  B    09  ƒ
+                                                         ƒ  D    19  ƒ
+                                                         ƒ  H    29  ƒ
+                                                         ƒ  SP   39  ƒ
+
+ Description:-  The 16-bit contents of the specified register pair are
+ added  to the contents of the HL register and the sum is saved in the
+ HL register and the sum is saved in the HL register.  The contents of
+ the source register pair are not altered.
+
+ Flag:-   If the result is larger than 16 bits the CY flag is set.  No
+ other flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL = C2H
+ Instruction  :-    DAD HL
+
+ Result       :-    Regs/Mem                           Flags
+                     HL = C2H                          Cy=0
+
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL = 05H
+                     SP = 2099H
+ Instruction  :-    DAD SP
+
+ Result       :-    Regs/Mem                           Flags
+                     HL = 209Eh                        Cy=0
+
+ ˛ After the execution of the instruction, the contents of the stack
+   pointer register are not altered.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+dcr
+ Dcr, Decrement source by 1 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   DCR           REG/          1       1            4    ƒ Reg   Hex ƒ
+                 MEM           1       3           10    ƒ  B    05  ƒ
+                                                         ƒ  C    0D  ƒ
+                                                         ƒ  D    15  ƒ
+                                                         ƒ  E    1D  ƒ
+                                                         ƒ  H    25  ƒ
+                                                         ƒ  L    2D  ƒ
+                                                         ƒ  M    35  ƒ
+                                                         ƒ  A    3D  ƒ
+
+ Description:-   The  contents  of  the  designated register/memory is
+ decremented  by  1  and the results are stored in the same place.  If
+ the  operand is a memory location, it is specified by the contents of
+ the HL register pair.
+
+ Flag:-    S, Z, P, AC  are  modified  to  reflect  the  result of the
+ operation.  CY is not modified.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     B = A0H
+ Instruction  :-    DCR B
+
+ Result       :-    Regs/Mem                           Flags
+                     B = 9FH
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+dcx
+ Dcx, Decrement register pair by 1 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   DCX         reg-pair        1       1            6    ƒ Reg   Hex ƒ
+                                                         ƒ  B    0B  ƒ
+                                                         ƒ  D    1B  ƒ
+                                                         ƒ  H    2B  ƒ
+                                                         ƒ  SP   3B  ƒ
+
+ Description:-   The  contents  of  the  specified  register  pair are
+ decremented  by  1.  This  instruction  views the contents of the two
+ registers as a 16-bit number.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     DE= 0A234H
+ Instruction  :-    DCX B
+
+ Result       :-    Regs/Mem                           Flags
+                     DE= 0A233H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+di
+ Di, Disable interrupts 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   DI           None            1       1          4          F3
+
+
+ Description:-  The Interrupt Enable flip-flop is reset and all the
+ interrupts except the TRAP are disabled.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ei
+ Ei, Enable interrupts 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   EI           None            1       1          4          FB
+
+
+ Description:-  The Interrupt Enable flip-flop is set and all the
+ interrupts except the TRAP are disabled.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+hlt
+ Hlt, Halt and enter wait state 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   HLT          None            1     2 or more   5 or more   76
+
+
+ Description:-  The MPU finishes executing the current instruction and
+ halts any further execution.
+
+ Flag:-  No flags are affected.
+
+ Note:-  In  the case of the emulator the 'hlt' instruction is used to
+ stop the execution of a program instead of the rst 1 instruction.
+
+ Also see :-
+           Proposed standard usage
+
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+in
+ In, Input data to accumulator from a port with 8-bit address 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   IN        8-bit port        2        3          10        DB
+              Address
+
+ Description:-   The  contents  of  the  input  port designated in the
+ operand are read and loaded into the accumulator.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+inr
+ Inr, Increment contents of register/memory by 1 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   INR           Reg/          1       1            4    ƒ Reg   Hex ƒ
+                 Mem           1       3           10    ƒ  B    04  ƒ
+                                                         ƒ  C    0C  ƒ
+                                                         ƒ  D    14  ƒ
+                                                         ƒ  E    1C  ƒ
+                                                         ƒ  H    24  ƒ
+                                                         ƒ  L    2C  ƒ
+                                                         ƒ  M    34  ƒ
+                                                         ƒ  A    3C  ƒ
+
+ Description:-   The  contents  of  the designated register/memory are
+ incremented  by  1  and the results are stored in the same place.  If
+ the  operand is a memory location, it is specified by the contents of
+ the HL register pair.
+
+ Flag:-    S, Z, P, AC  are  modified  to  reflect  the  result of the
+ operation.  CY is not modified.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     D = FFH
+ Instruction  :-    INR D
+
+ Result       :-    Regs/Mem                           Flags
+                     D = 00H
+ Note:-  Register D contains 00H, however no carry flag is set
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+inx
+ Inx, Increment register pair by 1 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   INX         reg-pair        1       1            6    ƒ Reg   Hex ƒ
+                                                         ƒ  B    03  ƒ
+                                                         ƒ  D    13  ƒ
+                                                         ƒ  H    23  ƒ
+                                                         ƒ  SP   33  ƒ
+
+ Description:-   The  contents  of  the  specified  register  pair are
+ incremented  by  1.  The  instruction  views  the contents of the two
+ registers as a 16-bit number.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL= 9FFFH
+ Instruction  :-    INX H
+
+ Result       :-    Regs/Mem                           Flags
+                     HL= A000H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+jmp
+ Jump unconditionally 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   JMP      16-Bit Address      3       5          18          C3
+
+
+ Description:-   The  program  sequence  is transferred to the address
+ speficied by  the  16-bit address.  This is a 3-byte instruction, the
+ second byte specifies the low-order byte and third byte specifies the
+ high-order byte.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-   Write  a  JMP  instruction  at  memory  location 2000H to
+ transfer the program sequence to memory location 2050H.
+
+ Memory Address:-     Hex code     Mnemonics
+    2000                C3         JMP 2050H
+    2001                50
+    2002                20
+
+ Note:-  The address is stored in reverse byte sequence.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+jc
+jnc
+jp
+jm
+jpe
+jpo
+jz
+jnz
+ JC, JNC, JP, JM, JPE, JPO, JZ, JNZ Jump Conditionally 
+
+ All the conditional jumps have the format:-
+  conditional jump 16-bit address 
+
+
+  Opcode    Description           Flag       Hex    M-Cycles/T-States
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   JC      Jump on Carry          CY=1       DA   ƒ
+   JNC     Jump with no Carry     CY=0       D2   ƒ (Applicable to all)
+                                                  ƒ
+   JP      Jump on positive       S =0       F2   ƒ 2M/7T  if condition
+   JM      Jump on minus          S =1       FA   ƒ is not true
+                                                  ƒ
+   JPE     Jump on Parity Even    P =1       EA   ƒ 3M/10T if condition
+   JPO     Jump on Parity Odd     P =0       E2   ƒ is true
+                                                  ƒ
+   JZ      Jump on Zero           Z =1       CA   ƒ
+   JNZ     Jump on No Zero        Z =0       C2   ƒ
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Flag:-  No flags are affected.
+
+lda
+ Lda, Load accumulator direct 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   LDA     16-bit Address      3        4          13         3A
+
+
+ Description:-   The  contents  of  a  memory location, specified by a
+ 16-bit  address  in  the operand, are copied to the accumulator.  The
+ contents of the source are not altered. This is a 3-byte instruction,
+ the  second  byte  specifies the low-order address and the third byte
+ specifies the high-order address.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     [2050H] = F8H
+
+ Instruction  :-    LDA 2050H
+
+ Result       :-    Regs/Mem                           Flags
+                     A  =  F8H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ldax
+ Ldax, Load accumulator indirect 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   LDAX      B/D register        1       2           7   ƒ Reg   Hex ƒ
+                                                         ƒ  BC   0A  ƒ
+                                                         ƒ  DE   1A  ƒ
+
+ Description:-   The  contents  of  the  designated register pair to a
+ memory location.  This instruction copies the contents of that memory
+ into  the accumulator.   The  contents of either the register pair or
+ the memory location are not altered.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     [2050H] = 9FH
+                     BC      = 2050H
+
+ Instruction  :-    LDAX B
+
+ Result       :-    Regs/Mem                           Flags
+                     A  =  9FH
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+lhld
+ Lhld, Load H and L registers direct 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   LHLD     16-bit address       3       5          16          2A
+
+ Description:-   The  instruction  copies  the  contents of the memory
+ location  pointed  out by the 16-bit address in register L and copies
+ the contents of the next memory location in register H.  The contents
+ of source memory locations are not altered.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     [2050H] = 9FH
+                     BC      = 2050H
+
+ Instruction  :-    LDAX B
+
+ Result       :-    Regs/Mem                           Flags
+                     A  =  9FH
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+lxi
+ Lxi, Load register pair immediate 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   LXI      16-bit address       3       5          10   ƒ Reg   Hex ƒ
+                                                         ƒ  B    01  ƒ
+                                                         ƒ  D    11  ƒ
+                                                         ƒ  H    21  ƒ
+                                                         ƒ  SP   31  ƒ
+
+ Description:-  The instruction loads 16-bit data in the register pair
+ designated in the operand.   This is a 3-byte instruction, the second
+ byte  specifies  the low-order byte and the thirde byte specifies the
+ the high-order byte.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+
+ Instruction  :-    LXI B,2050H
+
+ Result       :-    Regs/Mem                           Flags
+                     BC = 2050H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Note:- The data '2050h' is entered in reverse byte sequence.
+
+mov
+ Move, Copy from source to destination 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   MOV          Rd,Rs            1       1          4
+   MOV          Mem,Rs           1       2          7
+   MOV          Rd,Mem           1       2          7
+
+ Description:-   This  instruction  copies  the contents of the source
+ into  the  destination  register, the contents of the source register
+ are not altered.   If one of the operands is a memory location, it is
+ specified by the contetns of HL registers.
+
+ Flag:-  No flags are affected.
+
+                              Source location
+                       B   C   D   E   H   L   M   A
+                    ¿¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¬
+                  B √ 40  41  42  43  44  45  46  47 ƒ
+                  C √ 48  49  4A  4B  4C  4D  4E  4F ƒ
+  Destination     D √ 50  51  52  53  54  55  56  57 ƒ
+                  E √ 58  59  5A  5B  5C  5D  5E  5F ƒ
+  Location        H √ 60  61  62  63  64  65  66  67 ƒ
+                  L √ 68  69  6A  6B  6C  6D  6E  6F ƒ
+                  M √ 70  71  72  73  74  75  --  77 ƒ
+                  A √ 78  79  7A  7B  7C  7D  7E  4F ƒ
+
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     B = 34H
+ Instruction  :-    MOV A,B
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 34H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL     = 2050H
+                     [2050] = 9FH
+ Instruction  :-    MOV B,M
+
+ Result       :-    Regs/Mem                           Flags
+                     B = 9FH
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+mvi
+ Mvi, Move immediate 8-bit 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   MVI         Reg, Data         2       2           7   ƒ Reg   Hex ƒ
+               Mem, Data         2       3          10   ƒ  B    06  ƒ
+                                                         ƒ  C    0E  ƒ
+                                                         ƒ  D    16  ƒ
+                                                         ƒ  E    1E  ƒ
+                                                         ƒ  H    26  ƒ
+                                                         ƒ  L    2E  ƒ
+                                                         ƒ  M    36  ƒ
+                                                         ƒ  A    3E  ƒ
+
+ Description:-   The  8-bit data is stored in the destination register
+ or memory.   If  the operand is a memory location, it is specified by
+ the contents of HL registers.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+
+ Instruction  :-    MVI B,92H
+
+ Result       :-    Regs/Mem                           Flags
+                     B = 92H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+nop
+ Nop, No operation 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   NOP          None             1       1          4           00
+
+ Description:-  No operation is performed.  The instruction is fetched
+ and decoded; however, no operation is executed.
+
+ Flag:-  No flags are affected.
+
+ Comments:-   The  instruction  is  used  to fill in time delays or to
+ delete and insert instructions while troubleshooting.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ora
+ Ora, Logically or with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ORA            Reg            1       1           4   ƒ Reg   Hex ƒ
+                  Mem            1       2           7   ƒ  B    B0  ƒ
+                                                         ƒ  C    B1  ƒ
+                                                         ƒ  D    B2  ƒ
+                                                         ƒ  E    B3  ƒ
+                                                         ƒ  H    B4  ƒ
+                                                         ƒ  L    B5  ƒ
+                                                         ƒ  M    B6  ƒ
+                                                         ƒ  A    B7  ƒ
+
+ Description:-   The  contents  of  the accumulator are logically Ored
+ with the contents of the operand(register or memory), and the results
+ are  placed in the accumulator.  If the operand is a memory location,
+ its address is specified by the contents of HL registers.
+
+ Flag:-  Z, S, P are modified to reflect the results of the operation.
+ AC and CY are reset.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 03H
+                     B = 81H
+ Instruction  :-    ORA C
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 83H                S=1, Z=0, Ac=0, P=0, Cy=0
+
+                    03H        =    0 0 0 0   0 0 1 1
+                    81H        =    1 0 0 0   0 0 0 1
+                 ¡¡¡¡¡¡¡¡¡¡¡¡      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                    83H        =    1 0 0 0   0 0 1 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+
+ Comments:-  This instruction is commonly used to
+
+  ˛ Reset  the  CY  flag by ORing the contents of the accumulator with
+     itself
+  ˛ Set  the  Zero flag when 0 is loaded into the accumulator by ORing
+     the contents of accumulator with itself.
+  ˛ Combine bits from different registers.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ori
+ Ori, Logically OR immediate 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   ORI        8-bit data         2       2          7           F6
+
+ Description:- The contents of the accumulator are logically ORed with
+ the  8-bit  data  in  the  operand  and the results are placed in the
+ accumulator.
+
+ Flag:-  S, Z, P are modified to reflect the results of the operation.
+ CY and AC are reset.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+out
+ Out, Output data from accumulator to a port with 8-bit address 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   OUT       8-bit port        2        3          10        D3
+              Address
+
+ Description:- The contents of the accumulator are copied into the I/O
+ port specified by the operand.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+pchl
+ Pchl, Load program counter with HL contents 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   PCHL         None            1       1           6         E9
+
+
+ Description:-   The  contents of register H and L are copied into the
+ program  counter.   The contents of H are placed as a high-order byte
+ and of L as a low-order byte.
+
+ Flag:-  No flags are affected.
+
+ Comments:-   This instruction is equivalent to a 1-byte unconditional
+ jump instruction.   A program sequence can be changed to any location
+ by usimply loading the H and L registers with the appropriate address
+ and by using this instruction.
+
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+pop
+ Pop, Pop off stack to register pair 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   POP          Reg-pair         1       3          10   ƒ Reg   Hex ƒ
+                                                         ƒ  B    C1  ƒ
+                                                         ƒ  D    D1  ƒ
+                                                         ƒ  H    E1  ƒ
+                                                         ƒ  PSW  F1  ƒ
+
+ Description:- The contents of the memory location pointed out by the
+ stack  pointer register are copied to the low-order register(such as
+ (C,E,L, and flags) of the operand.  The stack pointer is incremented
+ by 1 and the contents of that memory location are copied to the high
+ order register (B,D,H,A) of the operand.  The stack pointer register
+ is again incremented by 1.
+
+ Flag:-  No flags are modified.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     SP = 2090H
+                     [2090] = F5H
+                     [2091] = 01H
+ Instruction  :-    POP H
+
+ Result       :-    Regs/Mem                           Flags
+                     SP = 2092H
+                     HL= 01F5H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Comments:- Operand PSW (Program Status Word) represents the contents
+ of  the accumulator  and the flag, the accumulator is the high-order
+ register and the flags are the low-order register.
+
+  ˛ The contents of the source, stack locations,are not altered after
+  the POP instruction.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+push
+ Push, Push register pair onto stack+ 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   PUSH       Reg-pair         1        3          10    ƒ Reg   Hex ƒ
+                                                         ƒ  B    C5  ƒ
+                                                         ƒ  D    D5  ƒ
+                                                         ƒ  H    E5  ƒ
+                                                         ƒ  PSW  F5  ƒ
+
+ Description:-  The  contents  of the register pair designated in the
+ operand  are  copied  into the stack in the following sequence.  The
+ stack  pointer register is decremented and the contents of the high-
+ order register(B, D, H, A) are copied into that location.  The stack
+ pointer  register  is  decremented  again  and  the  contents of the
+ low-order register (C, E, L, flags) are copied to that location.
+
+ Flag:-  No flags are modified.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     SP = 2099H
+                     BC = 3257H
+ Instruction  :-    PUSH B
+
+ Result       :-    Regs/Mem                           Flags
+                     SP = 2097
+                     [2097] = 57H
+                     [2098] = 32H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Comments:- Operand PSW (Program Status Word) represents the contents
+ of  the accumulator  and the flag, the accumulator is the high-order
+ register and the flags are the low-order register.
+
+  ˛  The  contents  of the source registers are not altered after the
+    PUSH instruction.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ral
+ Ral, Rotate accumulator left through carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RAL          None            1       1           4         17
+
+
+ Description:-  Each binary bit of the accumulator is rotated left by
+ one position through the Carry flag.  Bit D7 is placed in the bit in
+ the Carry flag and the Carry flag is placed in the least significant
+ position D0.
+
+ Flag:-   CY  is  modified  according  to bit D7.
+          S, Z, AC, P are not affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = A7H                            CY=0
+ Instruction  :-    RAL
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 4EH                            CY=1
+
+
+ Accumulator contents before instruction
+                           CY = 0
+     accumulator =    1 0 1 0  0 1 1 1
+
+ Accumulator contents after instruction
+                           CY = 1
+     accumulator =    0 1 0 0  1 1 1 0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Comments:-    This   instruction  effectively  provides  a  9  bit
+ accumulator.   The  original  contents  of  the  accumulator can be
+ restored by using instruction RAR (Rotate Accumulator Right through
+ Carry).   However, the contents will be modified if the instruction
+ rrc (Rotate Accumulator Right) is used to restore the contents.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+rar
+ Rar, Rotate accumulator right through carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RAR          None            1       1           4         1F
+
+
+ Description:-   Each  binary bit of the accumulator is rotated right
+ by one position through the Carry flag.  Bit D0 is placed in the bit
+ in  the  Carry  flag  and  the  Carry  flag  is  placed  in the most
+ significant position D7.
+
+ Flag:-   CY  is  modified  according  to bit D0.
+          S, Z, AC, P are not affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = A7H                            CY=0
+ Instruction  :-    RAR
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 53H                            CY=1
+
+
+ Accumulator contents before instruction
+                           CY = 0
+     accumulator =    1 0 1 0  0 1 1 1
+
+ Accumulator contents after instruction
+                           CY = 1
+     accumulator =    0 1 0 1  0 0 1 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+rlc
+ Rlc, Rotate accumulator left 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RLC          None            1       1           4         07
+
+
+ Description:-  Each binary bit of the accumulator is rotated left by
+ one position.   Bit D7 is placed in the position of D0 as well as in
+ the Carry flag.
+
+ Flag:-   CY  is  modified  according  to bit D7.
+          S, Z, AC, P are not affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = A7H                            CY=0
+ Instruction  :-    RAL
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 4FH                            CY=1
+
+
+ Accumulator contents before instruction
+                           CY = 0
+     accumulator =    1 0 1 0  0 1 1 1
+
+ Accumulator contents after instruction
+                           CY = 1
+     accumulator =    0 1 0 0  1 1 1 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Comments:-   The  contents  of bit D7 are placed in bit D0, and the
+ carry  flag  is modified accordingly.  However, the contents of the
+ crry are not placed in bit D0 as in instruction ral.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+rlc
+ Rrc, Rotate accumulator right 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RRC          None            1       1           4         0F
+
+
+ Description:-   Each  binary bit of the accumulator is rotated right
+ by  one  position.   Bit D0 is placed in the position of D7 as well as
+ in the Carry flag.
+
+ Flag:-   CY  is  modified  according  to bit D0.
+          S, Z, AC, P are not affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = A7H                            CY=0
+ Instruction  :-    RAL
+
+ Result       :-    Regs/Mem                           Flags
+                     A = D3H                            CY=1
+
+
+ Accumulator contents before instruction
+                           CY = 0
+     accumulator =    1 0 1 0  0 1 1 1
+
+ Accumulator contents after instruction
+                           CY = 1
+     accumulator =    1 1 0 1  0 0 1 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Comments:-   The  contents  of bit D0 are placed in bit D7, and the
+ carry  flag  is modified accordingly.  However, the contents of the
+ crry are not placed in bit D7 as in instruction rar.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ret
+ Ret, Return from subroutine unconditionally 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RLC          None            1       3          10         C9
+
+
+ Description:-    The   program  sequence  is  transferred  from  the
+ subroutine  to  the calling program.   The two bytes from the top of
+ the  stack  are  copied  into  the  program  counter and the program
+ execution  begins at the new address.  The instruction is equivalent
+ to pop program counter.
+
+ Flag:-   No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     SP = 2095H
+                     [2095] = 50
+                     [2096] = 20
+ Instruction  :-    RET
+
+ Result       :-    Regs/Mem                           Flags
+                     SP = 2097H
+                     IP = 2050H
+
+ Comments:-   This  instruction is used in conjunction with call or
+ conditional call instructions.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+rc
+rnc
+rp
+rm
+rpe
+rpo
+rz
+rnz
+ RC, RNC, RP, RM, RPE, RPO, RZ, RNZ Return Conditionally 
+
+ All the conditional returns have the format:-
+  conditional return 16-bit address 
+
+
+  Opcode    Description           Flag       Hex    M-Cycles/T-States
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RC      Return on Carry        CY=1       D8   ƒ
+   RNC     Return with no Carry   CY=0       D0   ƒ (Applicable to all)
+                                                  ƒ
+   RP      Return on positive     S =0       F0   ƒ 1M/6T  if condition
+   RM      Return on minus        S =1       F8   ƒ is not true
+                                                  ƒ
+   RPE     Return on Parity Even  P =1       E8   ƒ 3M/12T if condition
+   RPO     Return on Parity Odd   P =0       E0   ƒ is true
+                                                  ƒ
+   RZ      Return on Zero         Z =1       C8   ƒ
+   RNZ     Return on No Zero      Z =0       C0   ƒ
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Flag:-  No flags are affected.
+
+rim
+ RIM, Read Interrupt Mask 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RIM          None            1       1           4         20
+
+
+ Description:-   This  is a multipurpose instruction used to read the
+ status  of  interrupts 7.5, 6.5, 5.5 and read serial data input bit.
+ The  instruction  loads  eight  bits  in  the  accumulator  with the
+ following interpretations:
+
+                 D7  D6  D5  D4  D3  D2  D1  D0 
+               ¿¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡¬
+               √SID  i7  i6  i5  IE 7.5 6.5 5.5ƒ
+               ≈∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆«
+  Serial Input ∆∆«   ≈∆∆∆Ã∆∆∆«   √   ≈∆∆∆Ã∆∆∆«
+  data bit             ƒ         √         ≈∆∆ Interrupt masked
+                       ƒ         √             if bit = 1
+                       ƒ         √
+  Interrupt pending  ∆∆«         ≈∆∆  Interrupt enable
+  if bit = 1                          flip-flop is set
+                                      if bit = 1
+
+ Flag:-   No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+
+ Instruction  :-    RIM
+
+ Result       :-    Regs/Mem                           Flags
+                     A = Hex value as explained above
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Also see :-
+           Rim/Sim details
+
+rst
+ RST Restart Instruction 
+
+
+  Opcode        Binary Code          Hex          Restart Address
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   RST 0     1 1  0 0 0  1 1 1        C7      ƒ         0000
+   RST 1     1 1  0 0 1  1 1 1        CF      ƒ         0008
+   RST 2     1 1  0 1 0  1 1 1        D7      ƒ         0010
+   RST 3     1 1  0 1 1  1 1 1        DF      ƒ         0018
+   RST 4     1 1  1 0 0  1 1 1        E7      ƒ         0020
+   RST 5     1 1  1 0 1  1 1 1        EF      ƒ         0028
+   RST 6     1 1  1 1 0  1 1 1        F7      ƒ         0030
+   RST 7     1 1  1 1 1  1 1 1        FF      ƒ         0038
+
+
+ Description:-   The  RST  instructions are equivalent to 1-byte call
+ instructions  to  one  of the eight memory locations on page 0.  The
+ instructions  are  generally used in conjunction with interrupts and
+ inserted  using  external  hardware.   However, these can be used as
+ software instructions in a program to transfer program execution  to
+ one of the eight locations.
+
+ Flag:-  No flags are affected.
+
+sbb
+ Sbb, Subtract source and Borrow from accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SBB          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem                     2          7     ƒ  B    98  ƒ
+                                                         ƒ  C    99  ƒ
+                                                         ƒ  D    9A  ƒ
+                                                         ƒ  E    9B  ƒ
+                                                         ƒ  H    9C  ƒ
+                                                         ƒ  L    9D  ƒ
+                                                         ƒ  M    9E  ƒ
+                                                         ƒ  A    9F  ƒ
+
+
+ Description:-   The contents of the operand (register or memory) and
+ and  the  Borrow  flag  are  subtracted  from  the  contents  of the
+ accumulator  and  the  results  are placed in the accumulator.   The
+ contents of the operand are not altered; however the previous borrow
+ flag is reset.
+
+ Flag:-  All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 37H                           Cy=1
+                     B = 3FH
+ Instruction  :-    SBB B
+
+ Result       :-    Regs/Mem                           Flags
+                     A = F7H                 S=1, Z=0, Ac=0, P=0, Cy=1
+
+ The  borrow  flag is set to indicate the result is in 2's complement.
+ The previous Borrow flag is reset during the subtraction.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+sbi
+ Sbi , Subtract immediate with borrow 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SBI        8-bit data        2       2          7          DE
+
+
+ Description:-  The 8-bit data and borrow flag are subtracted from the
+ contents  of  the  accumulator,  and  the  result  is  stored in the
+ accumulator.
+
+ Flag:- All flags are modified to reflect the result of the operation
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 37H                           Cy=1
+
+ Instruction  :-    SBI 25H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 11H                  S=0, Z=0, Ac=1, P=1, Cy=0
+
+ Comments     :-
+ 1. After adition the previous carry flag is cleared.
+ 2. This  instruction  is  commonly  used  in  16-bit addition.  This
+    instruction  should  not be used to account for a carry generated
+    by 8-bit numbers.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+shld
+ Shld, Store H and L registers direct 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SHLD     16-bit Address      3       5          16         22
+
+
+ Description:-   The  contents of register L are stored in the memory
+ location  specified  by  the  16-bit  address in the operand and the
+ contents  of  H  register  are stored in the next memory location by
+ location  by incrementing the operand.  The contents of registers HL
+ are  not  altered.   This  is  a 3-byte instruction, the second byte
+ specifies  low-order  address  and the third byte specifies the high
+ order address.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL = 01FFH
+ Instruction  :-    SHLD 2050H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = A3H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+sim
+ SIM, Set interrupt Mask 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SIM          None            1       1           4         30
+
+
+ Description:-   This is a multipurpose instruction used to implement
+ the  8085  interrupts (RST  7.5,  6.5,  5.5) and serial data output.
+ The instruction interprets the accumulator contents as follows:
+ following interpretations:
+
+                 D7  D6  D5  D4  D3  D2  D1  D0 
+               ¿¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡À¡¡¡¬
+               √SOD SDE XXX R75 MSE 7.5 6.5 5.5ƒ
+               ≈∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆Ã∆∆∆«
+  Serial Output∆∆«   ƒ       ƒ   √   ≈∆∆∆Ã∆∆∆«
+  data bit           ƒ       ƒ   √         ≈∆∆ Interrupt masked
+                     ƒ       ƒ   √             if bit = 1
+                     ƒ       ƒ   √
+  Serial data  ∆∆∆∆∆∆«       ƒ   ≈∆∆  Mask set enable
+  enable                     ƒ        if bit = 1
+  1 = Enable                 ƒ
+  0 = Disable       Reset R7.5 if = 1
+
+ Flag:-   No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+  ˛  R75 - Reset RST 7.5 : If this bit=1, RST 7.5 flip-flop is reset
+     This is an additional control to reset RST 7.5
+  ˛  MSE - Mase set enable :  If  this  bit  is high, it enables the
+     functions of bits D2, D1, D0. This is a master control over all
+     the interrupt masking bits.  If this bit is low, bits D2,D1 and
+     D0 do not have any effect on the masks
+  ˛  7.5 = 0, RST 7.5 is enabled.
+         = 1, RST 7.5 is masked or disabled.
+  ˛  6.5 = 0, RST 6.5 is enabled.
+         = 1, RST 6.5 is masked or disabled.
+  ˛  5.5 = 0, RST 5.5 is enabled.
+         = 1, RST 5.5 is masked or disabled.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+
+ Instruction  :-    SIM
+
+ Result       :-    Regs/Mem                           Flags
+                     A = Hex value as explained above
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Also see :-
+           Rim/Sim details
+
+sphl
+ Sphl, Copy H and L registers to the stack pointer 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SPHL         None            1       1          6          F9
+
+
+ Description:-    The  instruction  loads  the  contents  of  H and L
+ registers  into  the  stack  pointer register, the contents of the H
+ register  provide  the  high-order address and the contents of the L
+ register provide the low-order address.  The contents of the H and L
+ registers are not altered.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+sta
+ STA, Store accumulator direct 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   LDA     16-bit Address      3        4          13         32
+
+
+ Description:- The contents of the accumulator are copied to a memory
+ location specified by the operand.  This is a 3-byte instruction,  the
+ second  byte  specifies  the  low-order  address  and  the  third byte
+ specifies the high-order address.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 9FH
+
+ Instruction  :-    STA 2050H
+
+ Result       :-    Regs/Mem                           Flags
+                     [2050H] = 9FH
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+stax
+ Stax, Store accumulator indirect 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   STAX      B/D register        1       2           7   ƒ Reg   Hex ƒ
+                                                         ƒ  BC   02  ƒ
+                                                         ƒ  DE   12  ƒ
+
+ Description:-   The  contents of the accumulator are copied into the
+ accumulator  are  copied  into  the memory location specified by the
+ contents  of  the  operand  (register pair).   The  contents  of the
+ accumulator contents in memory location 2050H.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A  =  F9H
+                     BC =  2050H
+
+ Instruction  :-    STAX B
+
+ Result       :-    Regs/Mem                           Flags
+                     [2050] = F9H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+stc
+ STC, Set carry 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   STC          None           1        1           4         37
+
+
+ Description:- The carry flag is set to 1.
+
+ Flag:-  No other flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+sub
+ Sub, Subtract register or memory from accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SUB          Reg/            1       1          4     ƒ Reg   Hex ƒ
+                Mem                     2          7     ƒ  B    90  ƒ
+                                                         ƒ  C    91  ƒ
+                                                         ƒ  D    92  ƒ
+                                                         ƒ  E    93  ƒ
+                                                         ƒ  H    94  ƒ
+                                                         ƒ  L    95  ƒ
+                                                         ƒ  M    96  ƒ
+                                                         ƒ  A    97  ƒ
+
+
+
+ Description:-   The  contents of the register or the memory location
+ specified  by  the  operand  are subtracted from the contents of the
+ accumulator,  and  the  results are placed in the accumulator.   The
+ contents of the source are not altered.
+
+ Flag:- All flags are modified to reflect the result of the operation
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 37H
+                     C = 40H
+
+ Instruction  :-    SUB C
+
+ Result       :-    Regs/Mem                           Flags
+                     A = F7H                S=1, Z=0, Ac=0, P=0, Cy=1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+sui
+ Sui, Subtract immediate from accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   SUI        8 bit data        2       2          7          D6
+
+
+ Description:-   The  8-bit data (the operand) is subtracted from the
+ contents  of  the  accumulator  and  the  results  are placed in the
+ accumulator.
+
+ Flag:-  All flags are modified to reflect the result of the addition.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 40H
+
+ Instruction  :-    SUI 37H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 9H                 S=0, Z=0, Ac=0, P=1, Cy=0
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+xchg
+ XCHG, Exchange H and L with D and E 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   XCHG         None           1        1           4         EB
+
+
+ Description:-  The  contents  of  register  H  are exchanged with the
+ contents  of register D, and the contents of register L are exchanged
+ with the contents of register E.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+xra
+ Xra, Exclusive or with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   XRA            Reg/           1       1           4   ƒ Reg   Hex ƒ
+                  Mem            1       2           7   ƒ  B    A8  ƒ
+                                                         ƒ  C    A9  ƒ
+                                                         ƒ  D    AA  ƒ
+                                                         ƒ  E    AB  ƒ
+                                                         ƒ  H    AC  ƒ
+                                                         ƒ  L    AD  ƒ
+                                                         ƒ  M    AE  ƒ
+                                                         ƒ  A    AF  ƒ
+
+ Description:-   The  contents  of the operand(register or memory) are
+ Exclusive  ORed with the contents of the accumulator, and the results
+ are  placed  in the accumulator.  The contents of the operand are not
+ modified.
+
+ Flag:-  Z, S, P are modified to reflect the results of the operation.
+ AC and CY are reset.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 77H
+                     D = 56H
+
+ Instruction  :-    XRA D
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 21H                S=0, Z=0, Ac=0, P=1, Cy=0
+
+                    03H        =    0 0 0 0   0 0 1 1
+                    81H        =    1 0 0 0   0 0 0 1
+                 ¡¡¡¡¡¡¡¡¡¡¡¡      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                    83H        =    1 0 0 0   0 0 1 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+xri
+ Xri, Exclusive OR immediate with accumulator 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   XRI        8-bit data         2       2          7           EE
+
+ Description:-   The  8-bit data (operand) is Exclusive ORed with the
+ contents  of  the  accumulator  and  the  results  are  place in the
+ accumulator.
+
+ Flag:- S, Z, P are modified to reflect the results of the operation.
+ CY and AC are reset.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     A = 8FH
+
+ Instruction  :-    XRI A2H
+
+ Result       :-    Regs/Mem                           Flags
+                     A = 2DH                S=0, Z=0, Ac=0, P=1, Cy=0
+
+                    8FH        =    1 0 0 0   1 1 1 1
+                    A2H        =    1 0 1 0   0 0 1 0
+                 ¡¡¡¡¡¡¡¡¡¡¡¡      ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+                    2DH        =    0 0 1 0   1 1 0 1
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+xthl
+ Xthl, Exchange H and L with Top of stack 
+
+  Opcode       Operand       Bytes   M-Cycles   T-States   Hex code
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+   XTHL         None             2       2          7           EE
+
+ Description:-  The contents of the L register are exchanged with the
+ stack  location  pointed  out  by  the contents of the stack pointer
+ register. The contents of the H register are exchanged with the next
+ stack  location (SP+1);  however,  the contents of the stack pointer
+ register are not altered.
+
+ Flag:-  No flags are affected.
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+ Example:-
+ Initial state:-    Regs/Mem                           Flags
+                     HL = A257H
+                     [2095] = 38H
+                     [2096] = 67H
+
+ Instruction  :-    XTHL
+
+ Result       :-    Regs/Mem                           Flags
+                     HL = 6738H
+                     [2095] = 57H
+                     [2096] = A2H
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+
+Hexadecimal order
+ Instruction summary by Hexadecimal Order 
+
+  Hex  Mnemonic     Group             Hex   Mnemonic      Group 
+ »»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»
+  00   nop         Control        ƒ√  00    nop         Control
+  01   lxi   B     Data transfer  ƒ√  01    lxi         Data transfer
+  02   stax  B     Data transfer  ƒ√  01    lxi         Data transfer
+  03   inx   B     Control        ƒ√  00    nop         Control
+  04   inr   B     Data transfer  ƒ√  01    lxi         Data transfer
+  05   dcr   B     Data transfer  ƒ√  01    lxi         Data transfer
+  06   mvi   B     Control        ƒ√  00    nop         Control
+  07   rlc         Data transfer  ƒ√  01    lxi         Data transfer
+  09   dad   B     Data transfer  ƒ√  01    lxi         Data transfer
+  0A   ldax  B     Control        ƒ√  00    nop         Control
+  0B   dcx   B     Data transfer  ƒ√  01    lxi         Data transfer
+  0C   inr   C     Data transfer  ƒ√  01    lxi         Data transfer
+  0D   dcr   C     Data transfer  ƒ√  01    lxi         Data transfer
+  0E   mvi   C     Control        ƒ√  00    nop         Control
+  0F   rrc         Data transfer  ƒ√  01    lxi         Data transfer
+  11   lxi   D     Data transfer  ƒ√  01    lxi         Data transfer
+  12   stax  D     Control        ƒ√  00    nop         Control
+  13   inx   D     Control        ƒ√  00    nop         Control
+  14   inr   D     Data transfer  ƒ√  01    lxi         Data transfer
+  15   dcr   D     Data transfer  ƒ√  01    lxi         Data transfer
+  16   mvi   D     Control        ƒ√  00    nop         Control
+  17   ral         Data transfer  ƒ√  01    lxi         Data transfer
+  19   dad   D     Data transfer  ƒ√  01    lxi         Data transfer
+  1A   ldax  D     Control        ƒ√  00    nop         Control
+  1B   dcx   D     Data transfer  ƒ√  01    lxi         Data transfer
+  1C   inr   E     Data transfer  ƒ√  01    lxi         Data transfer
+  1D   dcr   E     Data transfer  ƒ√  01    lxi         Data transfer
+  1E   mvi   E     Control        ƒ√  00    nop         Control
+  1F   rar         Data transfer  ƒ√  01    lxi         Data transfer
+  20   rim         Control        ƒ√  00    nop         Control
+  21   lxi   H     Data transfer  ƒ√  01    lxi         Data transfer
+  22   shld        Data transfer  ƒ√  01    lxi         Data transfer
+  23   inx   J     Control        ƒ√  00    nop         Control
+  24   inr   H     Data transfer  ƒ√  01    lxi         Data transfer
+  25   dcr   H     Data transfer  ƒ√  01    lxi         Data transfer
+  26   mvi   H     Control        ƒ√  00    nop         Control
+  27   daa         Data transfer  ƒ√  01    lxi         Data transfer
+  29   dad   H     Data transfer  ƒ√  01    lxi         Data transfer
+  2A   lhld        Control        ƒ√  00    nop         Control
+  2B   dcx   H     Data transfer  ƒ√  01    lxi         Data transfer
+  2C   inr   L     Data transfer  ƒ√  01    lxi         Data transfer
+  2D   dcr   L     Data transfer  ƒ√  01    lxi         Data transfer
+  2E   mvi   L     Control        ƒ√  00    nop         Control
+  2F   cma         Data transfer  ƒ√  01    lxi         Data transfer
+  30   sim         Data transfer  ƒ√  01    lxi         Data transfer
+  31   lxi   SP    Control        ƒ√  00    nop         Control
+  32   sta         Control        ƒ√  00    nop         Control
+

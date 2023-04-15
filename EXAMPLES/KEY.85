@@ -1,0 +1,20 @@
+  org 100
+  kickoff 100
+
+  lxi sp,200
+  lxi h,500
+  mvi b,0a
+loop:
+  push b
+  push h
+  mvi a,0c
+  mvi c,01
+  call 5
+  xchg
+  pop h
+  mov m,e
+  inx h
+  pop b
+  dcr b
+  jnz loop
+  hlt

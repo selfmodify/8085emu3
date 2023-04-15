@@ -1,0 +1,22 @@
+        ; program to perform block transfer
+        ; move a block of data from memory location 250 to 100
+
+        org 100
+        kickoff 100
+
+        setbyte  250,1
+        setbyte  251,2
+        setbyte  252,3
+        setbyte  253,4
+        setbyte  254,5
+
+        lxi h,250
+        lxi d,300
+        mvi b,5  ; count of numbers to be moved
+  loop: mov a,m
+        stax d
+        inx h
+        inx d
+        dcr b
+        jnz loop
+        hlt

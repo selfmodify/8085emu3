@@ -1,0 +1,33 @@
+; divide 16-bit by 8-bit using repeated subtraction
+
+setbyte 300,02
+setbyte 301,00
+setbyte 302,01
+
+        org 100
+        kickoff 100
+
+        LHLD 300
+        LDA  302
+        MOV B,A
+        CMA
+        INR A
+        MOV E,A
+        MOV A,B
+        LXI B,0
+        MVI D,0FF
+
+back:   DAD D
+        INX B
+        JC back
+
+        DCX B
+        ADD L
+        STA 05
+        MOV H,B
+        MOV L,C
+        SHLD 303
+        hlt
+
+
+

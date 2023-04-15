@@ -1,0 +1,10 @@
+
+
+       mov a,b
+       call a
+       hlt
+  a:   mvi  a,5
+       call b
+       ret
+  b:   mvi b,67
+       ret
